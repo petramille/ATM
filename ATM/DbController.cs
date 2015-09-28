@@ -8,20 +8,52 @@ namespace ATM
 {
     public class DbController
     {
-        static string connectionString = "";
-        SqlConnection newConnection = new SqlConnection();
-        SqlCommand newCommand;
+        static string connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+        SqlConnection myConnection = new SqlConnection();
+        SqlCommand command;
 
 
         //return List<string>
-        public void FindUser(string ssn, int pin)
+        public List<string> FindUser(string ssn, int pin)
         {
-            
+
             //Checks if login is valid and if user exists
             //Gets id, first name and number of attempts to login
-            
+
             //save in session
             //sp
+
+            command.Connection = myConnection;
+            myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+            myConnection.Open();
+
+            command.CommandText = "SP_Login";
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.Clear();
+
+            command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@fName", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@numberOfTries", System.Data.SqlDbType.VarChar);
+           
+
+            command.Parameters["@Username"].Value = ssn;
+            command.Parameters["@Password"].Value = pin;
+            command.Parameters["@ID"].Direction = System.Data.ParameterDirection.Output;
+            command.Parameters["@fName"].Direction = System.Data.ParameterDirection.Output;
+            command.Parameters["@numberOfTries"].Direction = System.Data.ParameterDirection.Output;
+
+            command.ExecuteNonQuery();
+
+            List<string> tmpCustomer = new List<string>();
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@ID"].Value));
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@fName"].Value));
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@numberOfTries"].Value));
+
+            myConnection.Close();
+
+            return tmpCustomer;
         }
 
         
