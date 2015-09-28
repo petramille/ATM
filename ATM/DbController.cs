@@ -54,6 +54,7 @@ namespace ATM
         public double GetAccountBalance(string accountNumber)
         {
             return 0;
+            
         }
 
         //returns List<string> with 5 or 25 latest history events
