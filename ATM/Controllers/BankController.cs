@@ -20,7 +20,17 @@ namespace ATM.Controllers
             if (!string.IsNullOrEmpty(SSN))
             {
                 Models.Login test = new Models.Login();
-                test.ssn = SSN;
+                
+                try
+                {
+                    test.ssn = int.Parse(SSN);
+                    test.pin = int.Parse(pin);
+                }
+                catch (Exception x)
+                {
+                    throw x;
+                }
+
                 return View(test);
             }
             else
