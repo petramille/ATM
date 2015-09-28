@@ -9,7 +9,7 @@ namespace ATM
 {
     public class BankLogic:Page
     {
-
+        
         DbController myController = new DbController();
 
         public void LogIn(string ssn, int pin)
