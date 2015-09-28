@@ -15,8 +15,26 @@ namespace ATM
             WithdrawAmountLeftToday = withdrawAmountLeftToday;
         }
 
-        public override void WithdrawMoney()
+        public override string WithdrawMoney(double amountToWithdraw, double balance)
         {
+            if (amountToWithdraw > 5000)
+            {
+
+            }
+            else if (amountToWithdraw > balance)
+            {
+
+            }
+            else if (WithdrawAmountLeftToday - amountToWithdraw < 0)
+            {
+
+            }
+            else
+            {
+
+            }
+
+            return "";
 
         }
     }

@@ -24,9 +24,9 @@ namespace ATM
             Balance = balance;
         }
 
-        public virtual void WithdrawMoney()
+        public virtual string WithdrawMoney(double amountToWithdraw, double balance)
         {
-
+            return "";
         }
     }
 }

@@ -10,6 +10,8 @@ namespace ATM
 
         public int logInAttempts;
 
+
+
         public void CheckLogInAttempts()
         {
             //
