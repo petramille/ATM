@@ -24,11 +24,14 @@
                 <h2>Please insert card</h2>
                 <br />
                 <b>Card Info</b>
-                <b><input class="form-control text-center" id="SSN" value="" readonly /></b>
-                <br />
-                <b>PIN</b>
-                <b><input class="form-control text-center" type="password" name="pin" value="" /></b><br /><br />
-                <button class="form-control" type="submit" name="submit"><b>Submit</b></button>
+                @using (Html.BeginForm("index", "Bank", FormMethod.Post))
+                {
+                    <b><input class="form-control text-center" id="SSN" name="SSN" type="text" value="" readonly></b>
+                    <br />
+                    <b>PIN</b>
+                    <b><input class="form-control text-center" type="password" name="pin" value="" /></b><br /><br />
+                    <button class="form-control" type="submit" name="submit"><b>Submit</b></button>
+                }
                 <br />
                 <br />
                 <br />
