@@ -12,7 +12,7 @@ namespace ATM
 
         DbController myController = new DbController();
 
-        public void LogIn(string ssn, int pin)
+        public string LogIn(string ssn, int pin)
         {
             //Checks if valid login. Gets user details and account numbers from database. 
             //Checks number of login attempt
@@ -20,6 +20,7 @@ namespace ATM
             tmpCustomer = myController.FindUser(ssn, pin);
             if (Convert.ToInt32(tmpCustomer[2]) == 3)
             {
+                Session["name"] = (string)Session[tmpCustomer[0]];
                 Session["name"] = (string)Session[tmpCustomer[0]];
             }
             else if (Convert.ToInt32(tmpCustomer[2]) == 2)
@@ -35,6 +36,8 @@ namespace ATM
 
             }
             // StoreHistory()
+
+            return "";
         }
 
 
