@@ -12,24 +12,23 @@ namespace ATM
         SqlConnection newConnection = new SqlConnection();
         SqlCommand newCommand;
 
-        public string FindUser(string cardNumber, int pin)
-        {
-            string id = "";
-            //Checks if login is valid and if user exists
-            return id;
 
+        //return List<string>
+        public void FindUser(string ssn, int pin)
+        {
+            
+            //Checks if login is valid and if user exists
+            //Gets id, first name and number of attempts to login
+            
+            //save in session
+            //sp
         }
 
         
-        public string GetUserName(string id)
-        {
-            string fName = "";
-            return fName;
-            //Gets firstName from db
-        }
+       
 
         //Supposed to return List<string> for all accounts
-        public void GetAccounts(string id)
+        public void GetAccounts(string ssn)
         {
             //Gets all account numbers and alias associated with that person
         }
