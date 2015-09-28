@@ -13,5 +13,28 @@ namespace ATM.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Index(string SSN, string pin)
+        {
+            if (!string.IsNullOrEmpty(SSN))
+            {
+                Models.Login test = new Models.Login();
+                test.ssn = SSN;
+                return View(test);
+            }
+            else
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+        }
+
+        // GET: Bank
+        public ActionResult History()
+        {
+            return View();
+        }
+
+
     }
 }
