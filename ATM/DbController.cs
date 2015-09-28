@@ -8,28 +8,59 @@ namespace ATM
 {
     public class DbController
     {
-        static string connectionString = "";
-        SqlConnection newConnection = new SqlConnection();
-        SqlCommand newCommand;
+        static string connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+        SqlConnection myConnection = new SqlConnection();
+        SqlCommand command;
 
-        public string FindUser(string cardNumber, int pin)
+
+        //return List<string>
+        public List<string> FindUser(string ssn, int pin)
         {
-            string id = "";
-            //Checks if login is valid and if user exists
-            return id;
 
+            //Checks if login is valid and if user exists
+            //Gets id, first name and number of attempts to login
+
+            //save in session
+            //sp
+
+            command.Connection = myConnection;
+            myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+            myConnection.Open();
+
+            command.CommandText = "SP_Login";
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.Clear();
+
+            command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@fName", System.Data.SqlDbType.VarChar);
+            command.Parameters.Add("@numberOfTries", System.Data.SqlDbType.VarChar);
+           
+
+            command.Parameters["@Username"].Value = ssn;
+            command.Parameters["@Password"].Value = pin;
+            command.Parameters["@ID"].Direction = System.Data.ParameterDirection.Output;
+            command.Parameters["@fName"].Direction = System.Data.ParameterDirection.Output;
+            command.Parameters["@numberOfTries"].Direction = System.Data.ParameterDirection.Output;
+
+            command.ExecuteNonQuery();
+
+            List<string> tmpCustomer = new List<string>();
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@ID"].Value));
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@fName"].Value));
+            tmpCustomer.Add(System.Convert.ToString(command.Parameters["@numberOfTries"].Value));
+
+            myConnection.Close();
+
+            return tmpCustomer;
         }
 
         
-        public string GetUserName(string id)
-        {
-            string fName = "";
-            return fName;
-            //Gets firstName from db
-        }
+       
 
         //Supposed to return List<string> for all accounts
-        public void GetAccounts(string id)
+        public void GetAccounts(string ssn)
         {
             //Gets all account numbers and alias associated with that person
         }
