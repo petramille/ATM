@@ -14,7 +14,12 @@ namespace ATM
         ErrorHandler myErrorHandler = new ErrorHandler();
 
 
-       
+       /// <summary>
+       /// Checks if login is valid and user exists
+       /// </summary>
+       /// <param name="ssn"></param>
+       /// <param name="pin"></param>
+       /// <returns></returns>
         public List<string> FindUser(string ssn, string pin)
         {
 
@@ -66,7 +71,7 @@ namespace ATM
            
         }
 
-        //Inte helt klar. Kolla med Hedvig när sp är klar
+        
         public string WithdrawFromAccount(string accountNumber, string ssn, double amount)
         {
 
@@ -109,7 +114,7 @@ namespace ATM
 
         }
 
-        public void StoreHistory(DateTime eventTime, string eventType, int id, string accountNumber, double transactionAmount)
+        public void StoreHistory(DateTime eventTime, string eventType, string ssn, string accountNumber, double transactionAmount)
         {
             try
             {
@@ -131,7 +136,7 @@ namespace ATM
 
                 command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;
-                command.Parameters["@Ssn"].Value = id;               
+                command.Parameters["@Ssn"].Value = ssn;               
                 //command.Parameters["@IP"].Value = ipNumber;
                 command.Parameters["@AccountNr"].Value = accountNumber;
                 command.Parameters["@HandledAmount"].Value = transactionAmount;
@@ -213,24 +218,15 @@ namespace ATM
                 myReader = command.ExecuteReader();
 
                 List<string> mySQLResult = new List<string>();
-                if (myReader!=null)
+                while (myReader.Read())
                 {
-                    while (myReader.Read())
+                    for (int i = 0; i < myReader.FieldCount; i++)
                     {
-                        for (int i = 0; i < myReader.FieldCount; i++)
-                        {
-                            mySQLResult.Add(myReader[i].ToString());
-                        }
+                        mySQLResult.Add(myReader[i].ToString());
                     }
-                    return mySQLResult;
                 }
-                else
-                {
-                    return null;
-                }
-                
 
-                
+                return mySQLResult;
 
             }
             catch (Exception ex)
