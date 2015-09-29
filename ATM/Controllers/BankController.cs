@@ -199,6 +199,25 @@ namespace ATM.Controllers
             }
         }
 
+        // GET: Landing
+        public ActionResult Landing(string quantity, string account)
+        {
+            BankLogic withdrawal = new BankLogic();
+
+            int sum = int.Parse(quantity);
+
+            string message = withdrawal.WithdrawFromAccount(sum, account);
+
+            if (message == "Ok")
+            {
+                return View();
+            }
+            else
+            {
+                return this.RedirectToAction("Error", "Bank", new { error = message });
+            }
+        }
+
         // GET: Error
         public ActionResult Error(string error)
         {
@@ -209,16 +228,5 @@ namespace ATM.Controllers
             return View(errorContainer);
         }
 
-        // GET: Landing
-        public ActionResult Landing(string quantity, string account)
-        {
-            BankLogic withdrawal = new BankLogic();
-
-            int sum = int.Parse(quantity);
-
-            withdrawal.WithdrawFromAccount(sum, account);
-
-            return View();
-        }
     }
 }
