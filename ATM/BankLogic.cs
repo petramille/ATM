@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace ATM
 {
-    public class BankLogic:Page
+    public class BankLogic : Page
     {
 
         DbController myController = new DbController();

@@ -19,19 +19,22 @@ namespace ATM.Controllers
         {
             if (!string.IsNullOrEmpty(SSN))
             {
-                Models.Login test = new Models.Login();
-                
+                Models.Login loginCredentials = new Models.Login();
+                BankLogic loginHandler = new BankLogic();
+
                 try
                 {
-                    test.ssn = int.Parse(SSN);
-                    test.pin = int.Parse(pin);
+                    //loginHandler.LogIn(SSN, int.Parse(pin));
+
+                    loginCredentials.ssn = Convert.ToInt64(SSN);
+                    loginCredentials.pin = int.Parse(pin);
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
 
-                return View(test);
+                return View(loginCredentials);
             }
             else
             {
@@ -45,6 +48,10 @@ namespace ATM.Controllers
             return View();
         }
 
-
+        // GET: Bank
+        public ActionResult Withdrawal()
+        {
+            return View();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace ATM.Models
     public class Login
     {
         [Required]
-        public int ssn { get; set; }
+        public long ssn { get; set; }
         [Required]
         public int pin { get; set; }
     }
