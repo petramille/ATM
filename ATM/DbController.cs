@@ -109,43 +109,43 @@ namespace ATM
 
         }
 
-        public void StoreHistory(string eventType, int id, string accountNumber, string ipNumber, double transactionAmount)
+        public void StoreHistory(DateTime eventTime, string eventType, int id, string accountNumber, string ipNumber, double transactionAmount)
         {
-            //try
-            //{
-            //    command.Connection = myConnection;
-            //    myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
-            //    myConnection.Open();
+            try
+            {
+                command.Connection = myConnection;
+                myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+                myConnection.Open();
 
-            //    command.CommandText = "SP_Logging";
-            //    command.CommandType = System.Data.CommandType.StoredProcedure;
-                //command.Parameters.Clear();
+                command.CommandText = "SP_Logging";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Clear();
 
-                //command.Parameters.Add("@A", System.Data.SqlDbType.VarChar, 8);
-                //command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
-                //command.Parameters.Add("@WithdrawAmount", System.Data.SqlDbType.Float);
-                //command.Parameters.Add("@Message", System.Data.SqlDbType.VarChar, 1);
+                command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
+                command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 10);
+                command.Parameters.Add("@UserID", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
+                command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
+                command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.VarChar, 8);
 
 
-                //command.Parameters["@AccountNR"].Value = accountNumber;
-                //command.Parameters["@Ssn"].Value = ssn;
-                //command.Parameters["@WithdrawAmount"].Value = amount;
-                //command.Parameters["@Message"].Direction = System.Data.ParameterDirection.Output;
+                command.Parameters["@EventTime"].Value = eventTime;
+                command.Parameters["@EventType"].Value = eventType;
+                command.Parameters["@UserID"].Value = id;               
+                command.Parameters["@IP"].Value = ipNumber;
+                command.Parameters["@AccountNr"].Value = accountNumber;
+                command.Parameters["@HandledAmount"].Value = transactionAmount;
+                
 
-            //    command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
+                myConnection.Close();
 
-            //    string message;
-            //    message = System.Convert.ToString(command.Parameters["@Message"].Value);
-
-            //    myConnection.Close();
-            //    return message;
-
-            //}
-            //catch (Exception x)
-            //{
-            //    myErrorHandler.HandleErrorMessage(x.ToString());
-            //    return null;
-            //}
+            }
+            catch (Exception x)
+            {
+                myErrorHandler.HandleErrorMessage(x.ToString());
+               
+            }
         }
 
         
