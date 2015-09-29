@@ -160,16 +160,21 @@ namespace ATM
                 //string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
                 return "Ok";
             }
+            else if (myAccount.WithdrawMoney(amount) == "")
+            {
+
+            }
 
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
             return "";
         }
 
-        public void GetAccountInformation()
+        public string GetAccountInformation(int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
+            return "";
         }
 
 
