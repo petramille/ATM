@@ -179,7 +179,7 @@ namespace ATM
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
-            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
+            //string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
             return "";
         }
 
