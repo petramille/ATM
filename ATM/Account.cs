@@ -13,12 +13,12 @@ namespace ATM
         public string AccountType { get; }
         public string AccountAlias { get; }
         public string AccountNumber { get; }
-        public double Balance { get; }
+        public string Balance { get; }
         public string Currency { get; set; }
 
 
 
-        public Account(string accountType, string accountAlias, string accountNumber, double balance, string currency)
+        public Account(string accountType, string accountAlias, string accountNumber, string balance, string currency)
         {
             AccountType = accountType;
             AccountAlias = accountAlias;
