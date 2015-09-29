@@ -209,35 +209,58 @@ namespace ATM
             int numberOf500 = Convert.ToInt32(bills[2]);
             int numberOf1000 = Convert.ToInt32(bills[3]);
 
-            if (amount<500)
-            {
-                if (numberOf100*100> amount)
-                {
-                    return $"Withdrawal of {amount/3} 100 SEK bills";
-                }
-                else
-                {
-                    return "false";
-                }
-            }
-            else if (amount < 1000)
-            {
-                if ((amount/500) > numberOf500 && (amount%500) > numberOf100) 
-                {
+            int withdrawed1000;
+            int withdrawed500;
+            int withdrawed200;
+            int withdrawed100;
 
-                }
-                //else if (amount / 100) > numberOf100)
-                //{
-                //    
-                //}
+            int[] result = GetBillsWithdrawn(numberOf1000, amount, 1000);
+            withdrawed1000 = result[0];
+            amount = result[1];
+
+            result = GetBillsWithdrawn(numberOf500, amount, 500);
+            withdrawed500 = result[0];
+            amount = result[1];
+
+            result = GetBillsWithdrawn(numberOf200, amount, 200);
+            withdrawed200 = result[0];
+            amount = result[1];
+
+            result = GetBillsWithdrawn(numberOf100, amount, 100);
+            withdrawed100 = result[0];
+            amount = result[1];
+
+            if (amount>0)
+            {
+                return "That combination of bills does not exist, try another amount";
             }
-            return "";
+            else
+            {
+                //subtract bills from db
+                return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
+            }
         }
 
-        
+        private int[] GetBillsWithdrawn(int numberOfBillsInATM, int amount, int typeOfBill)
+        {
+            int[] result = new int[2];
 
-
-
+            int withdrawn;
+            int amountOfBillsNeeded = amount / typeOfBill;
+            if (numberOfBillsInATM >= amountOfBillsNeeded)
+            {
+                withdrawn = amountOfBillsNeeded;
+                amount -= withdrawn;
+            }
+            else
+            {
+                withdrawn = numberOfBillsInATM;
+                amount -= withdrawn;
+            }
+            result[0] = withdrawn;
+            result[1] = amount;
+            return result;
+        }
 
     }
 
