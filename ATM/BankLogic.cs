@@ -75,7 +75,8 @@ namespace ATM
             string accountNumber = splittedLine[1];
 
             string commandLine = $"SELECT Alias, Currency, Amount, AccountType From Account where AccountNR= {accountNumber}";
-            //return myController.readFromSQL(commandLine);
+           
+            myController.readFromSQL(commandLine);
             
             
             //Gets details about specific account, calls GetAccount in DbController
