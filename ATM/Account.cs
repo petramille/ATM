@@ -13,12 +13,12 @@ namespace ATM
         public string AccountType { get; }
         public string AccountAlias { get; }
         public string AccountNumber { get; }
-        public string Balance { get; }
+        public double Balance { get; set; }
         public string Currency { get; set; }
 
 
 
-        public Account(string accountType, string accountAlias, string accountNumber, string balance, string currency)
+        public Account(string accountType, string accountAlias, string accountNumber, double balance, string currency)
         {
             AccountType = accountType;
             AccountAlias = accountAlias;
@@ -27,9 +27,17 @@ namespace ATM
             Currency = currency;
         }
 
-        public virtual string WithdrawMoney(double amountToWithdraw, double balance)
+        public virtual string WithdrawMoney(double amountToWithdraw)
         {
-            return "";
+            if (amountToWithdraw > Balance)
+            {
+                return "There is not enough money on the account";
+            }
+            else
+            {
+                return "Ok";
+            }
+            
         }
     }
 }

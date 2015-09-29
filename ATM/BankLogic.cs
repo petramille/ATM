@@ -57,8 +57,8 @@ namespace ATM
 
             if ((tmpCustomer[2]) == "3")
             {
-                Session["ssn"] = (string)Session[tmpCustomer[0]];
-                Session["name"] = (string)Session[tmpCustomer[1]];
+                Session["ssn"] = tmpCustomer[0];
+                Session["name"] = tmpCustomer[1];
 
                 //myController.StoreHistory();
                 return "Ok";
@@ -97,7 +97,7 @@ namespace ATM
 
             string alias = accountDetails[0];
             string currency = accountDetails[1];
-            string balance = accountDetails[2];
+            double balance = Convert.ToDouble(accountDetails[2]);
             string accountType = accountDetails[3];
             Account account;
 
@@ -145,14 +145,25 @@ namespace ATM
                 return (string)Session["ssn"];
             }
             else
+            {
                 return null;
+            }
+                
         }
 
-        public void WithdrawFromAccount()
+        public string WithdrawFromAccount(int amount)
         {
+            Account myAccount = (Account)Session["account"];
+
+            if (myAccount.WithdrawMoney(amount)=="Ok")
+            {
+                //string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
+                return "Ok";
+            }
+
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
-
+            return "";
         }
 
         public void GetAccountInformation()
