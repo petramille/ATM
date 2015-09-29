@@ -213,15 +213,24 @@ namespace ATM
                 myReader = command.ExecuteReader();
 
                 List<string> mySQLResult = new List<string>();
-                while (myReader.Read())
+                if (myReader!=null)
                 {
-                    for (int i = 0; i < myReader.FieldCount; i++)
+                    while (myReader.Read())
                     {
-                        mySQLResult.Add(myReader[i].ToString());
+                        for (int i = 0; i < myReader.FieldCount; i++)
+                        {
+                            mySQLResult.Add(myReader[i].ToString());
+                        }
                     }
+                    return mySQLResult;
                 }
+                else
+                {
+                    return null;
+                }
+                
 
-                return mySQLResult;
+                
 
             }
             catch (Exception ex)
