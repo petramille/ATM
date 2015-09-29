@@ -8,10 +8,10 @@ namespace ATM
 {
     public class DbController
     {
-        static string connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+        static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
         SqlConnection myConnection = new SqlConnection();
-        SqlCommand command;
-        ErrorHandler myErrorHandler;
+        SqlCommand command = new SqlCommand();
+        ErrorHandler myErrorHandler = new ErrorHandler();
 
 
         //return List<string>
@@ -31,13 +31,13 @@ namespace ATM
 
                 command.CommandText = "SP_Login";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.Clear();
+                //command.Parameters.Clear();
 
-                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar);
-                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar);
-                command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar);
-                command.Parameters.Add("@fName", System.Data.SqlDbType.VarChar);
-                command.Parameters.Add("@numberOfTries", System.Data.SqlDbType.VarChar);
+                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50);
+                command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@fName", System.Data.SqlDbType.VarChar, 20);
+                command.Parameters.Add("@numberOfTries", System.Data.SqlDbType.Int);
 
 
                 command.Parameters["@Username"].Value = ssn;
@@ -57,9 +57,9 @@ namespace ATM
                 return tmpCustomer;
 
             }
-            catch (Exception)
+            catch (Exception x)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+                myErrorHandler.HandleErrorMessage(x.ToString());
                 return null;
             }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ATM.Models;
 
 namespace ATM.Controllers
 {
@@ -11,47 +12,62 @@ namespace ATM.Controllers
         // GET: Bank
         public ActionResult Index()
         {
+
+
+
             return View();
         }
 
         [HttpPost]
         public ActionResult Index(string SSN, string pin)
         {
-            if (!string.IsNullOrEmpty(SSN))
+            BankLogic loginHandler = new BankLogic();
+            Error errorContainer = new Error();
+            string loginStatus = null;
+
+            if (!string.IsNullOrEmpty(SSN) && !string.IsNullOrEmpty(pin))
             {
-                Models.Login loginCredentials = new Models.Login();
-                BankLogic loginHandler = new BankLogic();
+                loginStatus = loginHandler.LogIn(SSN, pin);
 
-                try
+                if (loginStatus == "Ok")
                 {
-                    //loginHandler.LogIn(SSN, int.Parse(pin));
-
-                    loginCredentials.ssn = Convert.ToInt64(SSN);
-                    loginCredentials.pin = int.Parse(pin);
+                    return View(loginHandler);
                 }
-                catch (Exception)
+                else
                 {
-                    throw;
+                    if (string.IsNullOrEmpty(loginStatus))
+                    {
+                        loginStatus = "Unhandled error";
+                    }
+                    return this.RedirectToAction("Error", "Bank", new { error = loginStatus });
                 }
-
-                return View(loginCredentials);
             }
             else
             {
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Error", "Bank", new { error = loginStatus });
             }
         }
 
-        // GET: Bank
+        // GET: History
         public ActionResult History()
         {
             return View();
         }
 
-        // GET: Bank
+        // GET: Withdrawal
         public ActionResult Withdrawal()
         {
             return View();
+        }
+
+        // GET: Error
+        public ActionResult Error(string error)
+        {
+            Error errorContainer = new Error();
+
+            errorContainer.errorMessage = error;
+
+            return View(errorContainer);
         }
     }
 }

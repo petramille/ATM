@@ -14,8 +14,15 @@ namespace ATM.Models
     public class Login
     {
         [Required]
-        public long ssn { get; set; }
+        public string ssn { get; set; }
         [Required]
-        public int pin { get; set; }
+        public string pin { get; set; }
+        public string message { get; set; }
+    }
+
+    public class Error
+    {
+        [Required]
+        public string errorMessage { get; set; }
     }
 }
