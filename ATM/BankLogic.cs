@@ -13,36 +13,54 @@ namespace ATM
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
 
-        public string LogIn(string ssn, string pin)
+        public void CheckATMStatus(int atmId)
         {
-            //This code shuld be run before the person logs into the system
-            //Check if ATM is out of service or if maintenance is on-going
-            myErrorHandler.HandleErrorMessage("The ATM is out of service");
-            int atmId = 0;
-            bool billsLeft = myController.GetAmountOfBills(atmId);
+            string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
 
+            List<string> status = myController.readSingleColumnFromSQL(commandLine);
+
+            if (status[0] == "0")
+            {
+                myErrorHandler.HandleErrorMessage("Ok");
+            }
+            else if (status[0] == "1")
+            {
+                myErrorHandler.HandleErrorMessage("The ATM is out of service");
+            }
+            else if (status[0] == "2")
+            {
+                myErrorHandler.HandleErrorMessage("The system is out of service. Maintenance on-going");
+            }
+
+
+            bool billsLeft = myController.GetAmountOfBills(atmId);
             if (!billsLeft)
             {
                 myErrorHandler.HandleErrorMessage("The ATM is out of banknotes.");
             }
 
             bool receiptLeft = myController.GetReceiptLeft(atmId);
-
             if (!receiptLeft)
             {
                 myErrorHandler.HandleErrorMessage("No receipts can be given");
             }
-            //End
+        }
+
+
+        public string LogIn(string ssn, string pin)
+        {
+
 
             //Checks if valid login. Gets user details and account numbers from database. 
             //Checks number of login attempt
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
+            
             if ((tmpCustomer[2]) == "3")
             {
                 Session["ssn"] = (string)Session[tmpCustomer[0]];
                 Session["name"] = (string)Session[tmpCustomer[1]];
-                
+
                 //myController.StoreHistory();
                 return "Ok";
             }
@@ -50,7 +68,7 @@ namespace ATM
             {
                 string errorMessage = myErrorHandler.LogInAlarms(tmpCustomer[2]);
                 //myController.StoreHistory();
-                return errorMessage; 
+                return errorMessage;
             }
         }
 
@@ -59,7 +77,7 @@ namespace ATM
         public List<string> GetAccountsById(string ssn)
         {
             //Gets all accountalias and accountnumber associated with the specifc person id, calls GetAccounts in 
-            string commandLine= $"SELECT Alias, AccountNR From Account, Controller  where  Controller.SSN = {ssn} And Controller.AccountNR=Account.AccountNR";
+            string commandLine = $"SELECT Alias, Account.AccountNR From Account, Controller  where  Controller.SSN = '{ssn}' And Controller.AccountNR=Account.AccountNR";
             return myController.readFromSQL(commandLine);
 
         }
@@ -74,11 +92,18 @@ namespace ATM
             string[] splittedLine = alias_accountNr.Split(' ');
             string accountNumber = splittedLine[1];
 
-            string commandLine = $"SELECT Alias, Currency, Amount, AccountType From Account where AccountNR= {accountNumber}";
-           
-            myController.readFromSQL(commandLine);
-            
-            
+            string commandLine = $"SELECT Alias, Currency, Amount, AccountType From Account where AccountNR= '{accountNumber}'";
+
+            List<string> accountDetails = myController.readSingleColumnFromSQL(commandLine);
+
+            string alias = accountDetails[0];
+            string currency = accountDetails[1];
+            string balance = accountDetails[2];
+            string accountType = accountDetails[3];
+
+            Account account = new Account(accountType, alias, accountNumber, balance, currency);
+            Session.Add("account", account);
+
             //Gets details about specific account, calls GetAccount in DbController
             //switch (accountType)
             //{
@@ -87,13 +112,24 @@ namespace ATM
             // SavingAccount account = new SavingAccount();
 
             //    default:
-            //Account account = new Account();
             //        break;
             //}
 
 
         }
         //test 
+
+            public bool CheckSessionState()
+        {
+            if (Session["name"] != null && Session["ssn"] != null)
+            {
+                return true;
+
+            }
+
+            else
+                return false;
+        }
 
         public void WithdrawFromAccount()
         {
@@ -108,7 +144,7 @@ namespace ATM
             //GetAccountHistory(accountNumber);
         }
 
-        
+
 
     }
 
