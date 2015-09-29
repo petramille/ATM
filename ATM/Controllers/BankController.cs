@@ -190,8 +190,9 @@ namespace ATM.Controllers
         {
             if (!string.IsNullOrEmpty(accountNumber))
             {
-            return View();
-        }
+                ViewBag.account = accountNumber;
+                return View();
+            }
             else
             {
                 return this.RedirectToAction("Index", "Bank");
@@ -209,13 +210,13 @@ namespace ATM.Controllers
         }
 
         // GET: Landing
-        public ActionResult Landing(string quantity)
+        public ActionResult Landing(string quantity, string account)
         {
             BankLogic withdrawal = new BankLogic();
 
             int sum = int.Parse(quantity);
 
-            withdrawal.WithdrawFromAccount(sum);
+            withdrawal.WithdrawFromAccount(sum, account);
 
             return View();
         }
