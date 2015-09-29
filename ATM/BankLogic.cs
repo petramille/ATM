@@ -40,8 +40,9 @@ namespace ATM
             tmpCustomer = myController.FindUser(ssn, pin);
             if ((tmpCustomer[2]) == "3")
             {
-                Session["name"] = (string)Session[tmpCustomer[0]];
-                Session["ssn"] = (string)Session[tmpCustomer[1]];
+                Session["ssn"] = (string)Session[tmpCustomer[0]];
+                Session["name"] = (string)Session[tmpCustomer[1]];
+                
                 //myController.StoreHistory();
                 return "Ok";
             }
