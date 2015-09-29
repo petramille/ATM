@@ -57,9 +57,9 @@ namespace ATM
                 return tmpCustomer;
 
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage(x.ToString());
+                myErrorHandler.HandleErrorMessage("No access to the ATM at the moment");
                 return null;
             }
 
@@ -100,9 +100,9 @@ namespace ATM
                 return message;
 
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage(x.ToString());
+                myErrorHandler.HandleErrorMessage("No connection found");
                 return null;
             }
 
@@ -141,9 +141,9 @@ namespace ATM
                 myConnection.Close();
 
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage(x.ToString());
+                myErrorHandler.HandleErrorMessage("No connection found");
                
             }
         }
