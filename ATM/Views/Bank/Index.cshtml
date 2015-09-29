@@ -1,4 +1,6 @@
-﻿@{ 
+﻿@model ATM.Models.AccountList
+
+@{ 
     ViewBag.Title = "Account Summary";
 }
 
@@ -8,9 +10,10 @@
         <br />
         <br />
         <div class="list-group text-left">
-            <a href="#" class="list-group-item"><b>Account 1 - 5734.1543</b></a>
-            <a href="#" class="list-group-item"><b>Account 2 - 5734.1544</b></a>
-            <a href="#" class="list-group-item"><b>Account 3 - 5734.1545</b></a>
+            @foreach (var account in Model.account)
+            {
+                <a href="#" class="list-group-item"><b>@account</b></a>
+            }
         </div>
         <br />
         <br />

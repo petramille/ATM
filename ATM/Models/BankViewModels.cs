@@ -25,4 +25,14 @@ namespace ATM.Models
         [Required]
         public string errorMessage { get; set; }
     }
+
+    public class AccountList
+    {
+        public List<string> account { get; set; }
+
+        public AccountList()
+        {
+            this.account = new List<string>();
+        }
+    }
 }

@@ -12,12 +12,32 @@ namespace ATM.Controllers
         // GET: Bank
         public ActionResult Index()
         {
+            BankLogic loginHandler = new BankLogic();
 
+            // Change to string SSN instead of bool
+            bool sessionState = loginHandler.CheckSessionState();
 
+            if (sessionState == true)
+            {
+                List<string> getAccounts = loginHandler.GetAccountsById(Session["ssn"].ToString());
 
-            return View();
+                AccountList AccountList = new AccountList();
+
+                foreach (var account in getAccounts)
+                {
+                    AccountList.account.Add(account.ToString());
+                }
+
+                return View(AccountList);
+            }
+            else
+            {
+                string loginStatus = "Session is invalid, please try again.";
+                return this.RedirectToAction("Error", "Bank", new { error = loginStatus });
+            }
         }
 
+        // POST: Bank
         [HttpPost]
         public ActionResult Index(string SSN, string pin)
         {
@@ -31,7 +51,16 @@ namespace ATM.Controllers
 
                 if (loginStatus == "Ok")
                 {
-                    return View(loginHandler);
+                    List<string> getAccounts = loginHandler.GetAccountsById(SSN);
+
+                    AccountList AccountList = new AccountList();
+
+                    foreach (var account in getAccounts)
+                    {
+                        AccountList.account.Add(account.ToString());
+                    }
+
+                    return View(AccountList);
                 }
                 else
                 {
