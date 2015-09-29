@@ -138,14 +138,14 @@ namespace ATM
 
         
 
-        public bool CheckSessionState()
+        public string CheckSessionState()
         {
             if (Session["name"] != null && Session["ssn"] != null)
             {
-                return true;
+                return (string)Session["ssn"];
             }
             else
-                return false;
+                return null;
         }
 
         public void WithdrawFromAccount()
