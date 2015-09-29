@@ -15,7 +15,7 @@ namespace ATM
 
 
         //return List<string>
-        public List<string> FindUser(string ssn, int pin)
+        public List<string> FindUser(string ssn, string pin)
         {
 
             //Checks if login is valid and if user exists
@@ -73,7 +73,7 @@ namespace ATM
         public void GetAccounts(string ssn)
         {
             //Gets all account numbers and alias associated with that person from db
-            //sp
+            
         }
 
         public double CalculateWithdrawAmountLeftToday(string accountNumber)

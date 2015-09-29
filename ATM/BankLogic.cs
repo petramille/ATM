@@ -13,7 +13,7 @@ namespace ATM
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
 
-        public string LogIn(string ssn, int pin)
+        public string LogIn(string ssn, string pin)
         {
             //This code shuld be run before the person logs into the system
             //Check if ATM is out of service or if maintenance is on-going
@@ -57,7 +57,9 @@ namespace ATM
 
         public void GetAccountsById()
         {
-            //Gets all account names associated with the specifc person id, calls GetAccounts in DbController
+            //Gets all account names associated with the specifc person id, calls GetAccounts in 
+
+            
         }
 
         public void GetAccount()
