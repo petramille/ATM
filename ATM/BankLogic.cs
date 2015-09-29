@@ -41,7 +41,9 @@ namespace ATM
                myErrorHandler.HandleErrorMessage("The ATM is out of money.");
 
             }
-            Session["receipts"] = bills[4];          
+            //bills[0] is number of 100 kr bills, bill[1] 200 kr etc, bills[4] is number of receipts
+            Session["numberOfBills"] = bills; 
+            //Session["receipts"] = bills[4];          
 
         }
 
@@ -86,7 +88,7 @@ namespace ATM
         /// information från kontot och skapar kontot för att kunna få specifik logik.
         /// </summary>
         /// <param name="alias_accountNr">Tar raden som står i listan av konton</param>
-        public void GetAccount(string alias_accountNr)
+        public Account GetAccount(string alias_accountNr)
         {
             string[] splittedLine = alias_accountNr.Split(' ');
             string accountNumber = splittedLine[1];
@@ -106,13 +108,13 @@ namespace ATM
                 case "1":
                     double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
                     account = new SavingsAccount(accountType, alias, accountNumber, balance, currency, withDrawmoneyLeftToday);
-                    Session.Add("account", account);
-                    break;
+                    return account;
+                    
                
                 default:
                     account = new Account(accountType, alias, accountNumber, balance, currency);
-                    Session.Add("account", account);
-                    break;
+                    return account;
+                    
             }
         }
 
@@ -150,9 +152,10 @@ namespace ATM
                 
         }
 
-        public string WithdrawFromAccount(int amount)
+        public string WithdrawFromAccount(int amount, string alias_accountNr)
         {
-            Account myAccount = (Account)Session["account"];
+
+            Account myAccount = GetAccount(alias_accountNr);
 
             if (myAccount.WithdrawMoney(amount)=="Ok")
             {
@@ -175,11 +178,11 @@ namespace ATM
             //StoreHistory();
         }
 
-        public List<string> GetAccountInformation(int amountOfLines)
+        public List<string> GetAccountInformation( string alias_accountNr, int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
-            Account myAccount = (Account)Session["account"];
+            Account myAccount = GetAccount(alias_accountNr);
             List<string> accountInformation=new List<string>();
             accountInformation.Add(myAccount.AccountAlias+", AccountNumber: "+myAccount.AccountNumber+ ", Balance: "+myAccount.Balance+ ", Currency: "+myAccount.Currency);
             
@@ -189,6 +192,20 @@ namespace ATM
             accountInformation.AddRange(myController.readFromSQL(commandLine));
             return accountInformation;
         }
+
+        public void HighlightButtonAvailable()
+        {
+            List<string> bills = (List<string>)Session["numberOfBills"];
+            int numberOf100 = Convert.ToInt32(bills[0]);
+            int numberOf200 = Convert.ToInt32(bills[1]);
+            int numberOf500 = Convert.ToInt32(bills[2]);
+            int numberOf1000 = Convert.ToInt32(bills[3]);
+
+            
+        }
+
+        
+
 
 
 
