@@ -38,7 +38,7 @@ namespace ATM
             //Checks number of login attempt
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
-            if (Convert.ToInt32(tmpCustomer[2]) == 3)
+            if ((tmpCustomer[2]) == "3")
             {
                 Session["name"] = (string)Session[tmpCustomer[0]];
                 Session["ssn"] = (string)Session[tmpCustomer[1]];
@@ -47,7 +47,7 @@ namespace ATM
             }
             else
             {
-                string errorMessage = myErrorHandler.LogInAlarms(Convert.ToInt32(tmpCustomer[2]));
+                string errorMessage = myErrorHandler.LogInAlarms(tmpCustomer[2]);
                 //myController.StoreHistory();
                 return errorMessage; 
             }
