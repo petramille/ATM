@@ -32,22 +32,17 @@ namespace ATM
                 myErrorHandler.HandleErrorMessage("The system is out of service. Maintenance on-going");
             }
 
-            commandLine = $"SELECT bills100, bills200, bills500, bills1000 From Unit where Id = '{atmId}'";
+            commandLine = $"SELECT bills100, bills200, bills500, bills1000, Receipt From Unit where Id = '{atmId}'";
 
             List<string> bills = myController.readSingleColumnFromSQL(commandLine);
-            
 
-            
-            //if (!billsLeft)
-            //{
-            //    myErrorHandler.HandleErrorMessage("The ATM is out of banknotes.");
-            //}
+            if (bills[0] == "0" && bills[1] == "0" && bills[2] == "0" && bills[3] == "0")
+            {
+               myErrorHandler.HandleErrorMessage("The ATM is out of money.");
 
-           
-            //if (!receiptLeft)
-            //{
-            //    myErrorHandler.HandleErrorMessage("No receipts can be given");
-            //}
+            }
+            Session["receipts"] = (string)Session[bills[4]];          
+
         }
 
 
