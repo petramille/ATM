@@ -41,7 +41,7 @@ namespace ATM
                myErrorHandler.HandleErrorMessage("The ATM is out of money.");
 
             }
-            Session["receipts"] = (string)Session[bills[4]];          
+            Session["receipts"] = bills[4];          
 
         }
 
@@ -175,12 +175,19 @@ namespace ATM
             //StoreHistory();
         }
 
-        public string GetAccountInformation(int amountOfLines)
+        public List<string> GetAccountInformation(int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
-            //string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
-            return "";
+            Account myAccount = (Account)Session["account"];
+            List<string> accountInformation=new List<string>();
+            accountInformation.Add(myAccount.AccountAlias+", AccountNumber: "+myAccount.AccountNumber+ ", Balance: "+myAccount.Balance+ ", Currency: "+myAccount.Currency);
+            
+            string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
+
+            //addRange kanske strular??
+            accountInformation.AddRange(myController.readFromSQL(commandLine));
+            return accountInformation;
         }
 
 
