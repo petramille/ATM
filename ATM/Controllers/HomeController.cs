@@ -11,7 +11,20 @@ namespace ATM.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            Session.Abandon();
+
+            string checkStatus = "Ok";
+
+            // checkStatus = CheckDatabase();
+
+            if (checkStatus == "Ok")
+            {
+                return View();
+            }
+            else
+            {
+                return this.RedirectToAction("Error", "Bank", new { error = checkStatus });
+            }
         }
 
         public ActionResult About()

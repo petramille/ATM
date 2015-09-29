@@ -42,6 +42,7 @@ namespace ATM
             {
                 Session["ssn"] = (string)Session[tmpCustomer[0]];
                 Session["name"] = (string)Session[tmpCustomer[1]];
+                
                 //myController.StoreHistory();
                 return "Ok";
             }
@@ -55,13 +56,29 @@ namespace ATM
 
 
 
-        public void GetAccountsById()
+        public List<string> GetAccountsById(string ssn)
         {
-            //Gets all account names associated with the specifc person id, calls GetAccounts in DbController
+            //Gets all accountalias and accountnumber associated with the specifc person id, calls GetAccounts in 
+            string commandLine= $"SELECT Alias, AccountNR From Account, Controller  where  Controller.SSN = {ssn} And Controller.AccountNR=Account.AccountNR";
+            return myController.readFromSQL(commandLine);
+
         }
 
-        public void GetAccount()
+        /// <summary>
+        /// Splittar först raden som står i listan för att få ut kontonumret. Hämtar sedan
+        /// information från kontot och skapar kontot för att kunna få specifik logik.
+        /// </summary>
+        /// <param name="alias_accountNr">Tar raden som står i listan av konton</param>
+        public void GetAccount(string alias_accountNr)
         {
+            string[] splittedLine = alias_accountNr.Split(' ');
+            string accountNumber = splittedLine[1];
+
+            string commandLine = $"SELECT Alias, Currency, Amount, AccountType From Account where AccountNR= {accountNumber}";
+           
+            myController.readFromSQL(commandLine);
+            
+            
             //Gets details about specific account, calls GetAccount in DbController
             //switch (accountType)
             //{

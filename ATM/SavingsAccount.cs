@@ -10,7 +10,7 @@ namespace ATM
         
         public double WithdrawAmountLeftToday { get; }
 
-        public SavingsAccount(string accountType, string accountAlias, string accountNumber, double balance, double withdrawAmountLeftToday) : base (accountType, accountAlias, accountNumber, balance)
+        public SavingsAccount(string accountType, string accountAlias, string accountNumber, double balance, string currency, double withdrawAmountLeftToday) : base (accountType, accountAlias, accountNumber, balance, currency)
         {
             WithdrawAmountLeftToday = withdrawAmountLeftToday;
         }

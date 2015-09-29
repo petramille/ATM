@@ -12,6 +12,9 @@ namespace ATM.Controllers
         // GET: Bank
         public ActionResult Index()
         {
+
+
+
             return View();
         }
 
@@ -24,8 +27,6 @@ namespace ATM.Controllers
 
             if (!string.IsNullOrEmpty(SSN) && !string.IsNullOrEmpty(pin))
             {
-                
-
                 loginStatus = loginHandler.LogIn(SSN, pin);
 
                 if (loginStatus == "Ok")

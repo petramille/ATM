@@ -9,7 +9,7 @@ namespace ATM
     {
         public string CardNumber { get; set; }
 
-        public Customer(string ssn, int pin, string fName, string lName, string cardNumber) : base (ssn, pin, fName, lName)
+        public Customer(string ssn, string pin, string fName, string lName, string cardNumber) : base (ssn, pin, fName, lName)
         {
             CardNumber = cardNumber;
         }
