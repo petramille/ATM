@@ -50,7 +50,7 @@ namespace ATM.Controllers
                 List<string> getAccounts = loginHandler.GetAccountsById(error);
 
                 foreach (var account in getAccounts)
-                {
+            {
                     AccountList.account.Add(account.ToString());
                 }
 
@@ -149,8 +149,8 @@ namespace ATM.Controllers
         {
             if (!string.IsNullOrEmpty(accountNumber))
             {
-                return View();
-            }
+            return View();
+        }
             else
             {
                 return this.RedirectToAction("Index", "Bank");
@@ -190,8 +190,8 @@ namespace ATM.Controllers
         {
             if (!string.IsNullOrEmpty(accountNumber))
             {
-                return View();
-            }
+            return View();
+        }
             else
             {
                 return this.RedirectToAction("Index", "Bank");

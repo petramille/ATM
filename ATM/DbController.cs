@@ -14,7 +14,7 @@ namespace ATM
         ErrorHandler myErrorHandler = new ErrorHandler();
 
 
-        //return List<string>
+       
         public List<string> FindUser(string ssn, string pin)
         {
 
@@ -66,11 +66,86 @@ namespace ATM
            
         }
 
+        //Inte helt klar. Kolla med Hedvig när sp är klar
+        public string WithdrawFromAccount(string accountNumber, string ssn, double amount)
+        {
+
+            try
+            {
+                command.Connection = myConnection;
+                myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+                myConnection.Open();
+
+                command.CommandText = "SP_WithdrawMoney";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                //command.Parameters.Clear();
+
+                command.Parameters.Add("@AccountNR", System.Data.SqlDbType.VarChar, 8);
+                command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@WithdrawAmount", System.Data.SqlDbType.Float);
+                command.Parameters.Add("@Message", System.Data.SqlDbType.VarChar, 1);
+
+
+                command.Parameters["@AccountNR"].Value = accountNumber;
+                command.Parameters["@Ssn"].Value = ssn;
+                command.Parameters["@WithdrawAmount"].Value = amount;
+                command.Parameters["@Message"].Direction = System.Data.ParameterDirection.Output;
+
+                command.ExecuteNonQuery();
+
+                string message;
+                message = System.Convert.ToString(command.Parameters["@Message"].Value);
+
+                myConnection.Close();
+                return message;
+
+            }
+            catch (Exception x)
+            {
+                myErrorHandler.HandleErrorMessage(x.ToString());
+                return null;
+            }
+
+
+        }
 
         public void StoreHistory(string eventType, int id, string accountNumber, string ipNumber, double transactionAmount)
         {
-            //Sends event details to db for logging
-            //sp?
+            //try
+            //{
+            //    command.Connection = myConnection;
+            //    myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+            //    myConnection.Open();
+
+            //    command.CommandText = "SP_Logging";
+            //    command.CommandType = System.Data.CommandType.StoredProcedure;
+                //command.Parameters.Clear();
+
+                //command.Parameters.Add("@A", System.Data.SqlDbType.VarChar, 8);
+                //command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
+                //command.Parameters.Add("@WithdrawAmount", System.Data.SqlDbType.Float);
+                //command.Parameters.Add("@Message", System.Data.SqlDbType.VarChar, 1);
+
+
+                //command.Parameters["@AccountNR"].Value = accountNumber;
+                //command.Parameters["@Ssn"].Value = ssn;
+                //command.Parameters["@WithdrawAmount"].Value = amount;
+                //command.Parameters["@Message"].Direction = System.Data.ParameterDirection.Output;
+
+            //    command.ExecuteNonQuery();
+
+            //    string message;
+            //    message = System.Convert.ToString(command.Parameters["@Message"].Value);
+
+            //    myConnection.Close();
+            //    return message;
+
+            //}
+            //catch (Exception x)
+            //{
+            //    myErrorHandler.HandleErrorMessage(x.ToString());
+            //    return null;
+            //}
         }
 
         
