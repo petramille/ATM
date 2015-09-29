@@ -11,8 +11,6 @@ namespace ATM.Controllers
     {
         public ActionResult Index()
         {
-            Session.Abandon();
-
             string checkStatus = "Ok";
 
             // checkStatus = CheckDatabase();
@@ -37,6 +35,13 @@ namespace ATM.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+        public ActionResult Done()
+        {
+            Session.Abandon();
 
             return View();
         }

@@ -250,6 +250,8 @@
     <Content Include="Views\Bank\History.cshtml" />
     <Content Include="Views\Bank\Withdrawal.cshtml" />
     <Content Include="Views\Bank\Error.cshtml" />
+    <Content Include="Views\Home\Done.cshtml" />
+    <Content Include="Views\Bank\Landing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
