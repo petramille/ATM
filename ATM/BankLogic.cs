@@ -15,6 +15,25 @@ namespace ATM
 
         public string LogIn(string ssn, int pin)
         {
+            //This code shuld be run before the person logs into the system
+            //Check if ATM is out of service or if maintenance is on-going
+            myErrorHandler.HandleErrorMessage("The ATM is out of service");
+            int atmId = 0;
+            bool billsLeft = myController.GetAmountOfBills(atmId);
+
+            if (!billsLeft)
+            {
+                myErrorHandler.HandleErrorMessage("The ATM is out of banknotes.");
+            }
+
+            bool receiptLeft = myController.GetReceiptLeft(atmId);
+
+            if (!receiptLeft)
+            {
+                myErrorHandler.HandleErrorMessage("No receipts can be given");
+            }
+            //End
+
             //Checks if valid login. Gets user details and account numbers from database. 
             //Checks number of login attempt
             List<string> tmpCustomer = new List<string>();

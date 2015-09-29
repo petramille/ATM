@@ -72,11 +72,13 @@ namespace ATM
         //Supposed to return List<string> for all accounts
         public void GetAccounts(string ssn)
         {
-            //Gets all account numbers and alias associated with that person
+            //Gets all account numbers and alias associated with that person from db
+            //sp
         }
 
         public double CalculateWithdrawAmountLeftToday(string accountNumber)
         {
+            //select directly from db
             double amount = 0;
             return amount;
         }
@@ -85,33 +87,38 @@ namespace ATM
         public void GetAccountDetails(string accountNumber)
         {
         //Gets all details about the account chosen by the customer
+        //sp
         }
 
         public void StoreHistory(string eventType, int id, string accountNumber, string ipNumber, double transactionAmount)
         {
             //Sends event details to db for logging
+            //sp?
         }
 
         public double GetAccountBalance(string accountNumber)
         {
             return 0;
+            //select directly from db
             
         }
 
         //returns List<string> with 5 or 25 latest history events
         public void GetAccountHistory(string accountNumber, int numberOfHistoryEvents)
         {
-
+            //select directly from db
         }
         
         //returns List<int> representing the numbers of different bills in the atm
-        public void GetAmountOfBills(int atmId)
+        public bool GetAmountOfBills(int atmId)
         {
-            
+            //select directly from db
+            return true;
         }
 
         public bool GetReceiptLeft(int atmId)
         {
+            //select directly from db
             return true;
         }
     }
