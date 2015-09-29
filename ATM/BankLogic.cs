@@ -156,6 +156,8 @@ namespace ATM
                 
         }
 
+
+        //Discuss the string that is returned. Maybe now it is supposed to be "ok" at some point when evaluated in the controller!!!
         public string WithdrawFromAccount(int amount, string alias_accountNr)
         {
 
@@ -166,21 +168,33 @@ namespace ATM
 
             if (!insertedAmountCorrect)
             {
+                myAccount.Equals(null);
                 return "The requested amount of money must be even 100 SEK";
             }
 
             if (myAccount.WithdrawMoney(amount) == "Ok")
             {
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
-                myAccount.Equals(null);
+                
                 if (transferCompleted.Equals("1"))
                 {
+                    string result = TransferBills(amount);
+                    if (result == "false")
+                    {
+                        myAccount.Equals(null);
+                        return "That combination of bills does not exist, try another amount";
+                    }
+
+
                     DateTime presentTime = DateTime.Now;
                     myController.StoreHistory(presentTime, myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
-                    return "Ok";
+                    myAccount.Equals(null);
+                    return result;
+                    //Result shows number of the different bills
                 }
                 else
                 {
+                    myAccount.Equals(null);
                     return "Withdrawal of that amount was not possible";
                 }                
             }
@@ -257,11 +271,12 @@ namespace ATM
 
             if (amount>0)
             {
-                return "That combination of bills does not exist, try another amount";
+                return "false";
                 }
                 else
                 {
-                //subtract bills from db
+                //Do: Calls method that contains SP in database to update number of bills
+
                 return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
                 }
             }
