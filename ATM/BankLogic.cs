@@ -38,11 +38,11 @@ namespace ATM
 
             if (bills[0] == "0" && bills[1] == "0" && bills[2] == "0" && bills[3] == "0")
             {
-               myErrorHandler.HandleErrorMessage("The ATM is out of money.");
+                myErrorHandler.HandleErrorMessage("The ATM is out of money.");
 
             }
             //bills[0] is number of 100 kr bills, bill[1] 200 kr etc, bills[4] is number of receipts
-            Session["numberOfBills"] = bills; 
+            Session["numberOfBills"] = bills;
             //Session["receipts"] = bills[4];          
 
         }
@@ -109,12 +109,12 @@ namespace ATM
                     double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
                     account = new SavingsAccount(accountType, alias, accountNumber, balance, currency, withDrawmoneyLeftToday);
                     return account;
-                    
-               
+
+
                 default:
                     account = new Account(accountType, alias, accountNumber, balance, currency);
                     return account;
-                    
+
             }
         }
 
@@ -128,7 +128,7 @@ namespace ATM
             double totalWithdrawnAmount = 0;
             double withdrawnAmount = 0;
 
-            if (amountValues!=null)
+            if (amountValues != null)
             {
                 foreach (var value in amountValues)
                 {
@@ -137,11 +137,11 @@ namespace ATM
 
                 }
             }
-            
+
             return (5000 - totalWithdrawnAmount);
         }
 
-        
+
 
         public string CheckSessionState()
         {
@@ -153,7 +153,7 @@ namespace ATM
             {
                 return null;
             }
-                
+
         }
 
         public string WithdrawFromAccount(int amount, string alias_accountNr)
@@ -162,18 +162,27 @@ namespace ATM
             Account myAccount = GetAccount(alias_accountNr);
             string ssn = (string)Session["ssn"];
 
-            if (myAccount.WithdrawMoney(amount)=="Ok")
+            bool insertedAmountCorrect = CheckInsertedAmount(amount);
+
+            if (!insertedAmountCorrect)
+            {
+                return "The requested amount of money must be even 100 SEK";
+            }
+
+            if (myAccount.WithdrawMoney(amount) == "Ok")
             {
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
                 myAccount.Equals(null);
                 if (transferCompleted.Equals("1"))
                 {
+                    DateTime presentTime = DateTime.Now;
+                    myController.StoreHistory(presentTime, myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
                     return "Ok";
                 }
                 else
                 {
                     return "Withdrawal of that amount was not possible";
-                }                
+                }
             }
             else
             {
@@ -185,14 +194,30 @@ namespace ATM
             //StoreHistory();
         }
 
+
+        public bool CheckInsertedAmount(int amount)
+        {
+            if (amount % 100 == 0)
+            {
+                return true;
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
         public List<string> GetAccountInformation(string alias_accountNr, int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
             Account myAccount = GetAccount(alias_accountNr);
-            List<string> accountInformation=new List<string>();
-            accountInformation.Add(myAccount.AccountAlias+", AccountNumber: "+myAccount.AccountNumber+ ", Balance: "+myAccount.Balance+ ", Currency: "+myAccount.Currency);
-            
+            List<string> accountInformation = new List<string>();
+            accountInformation.Add(myAccount.AccountAlias + ", AccountNumber: " + myAccount.AccountNumber + ", Balance: " + myAccount.Balance + ", Currency: " + myAccount.Currency);
+
             string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
 
             //addRange kanske strular??
@@ -209,11 +234,11 @@ namespace ATM
             int numberOf500 = Convert.ToInt32(bills[2]);
             int numberOf1000 = Convert.ToInt32(bills[3]);
 
-            if (amount<500)
+            if (amount < 500)
             {
-                if (numberOf100*100> amount)
+                if (numberOf100 * 100 > amount)
                 {
-                    return $"Withdrawal of {amount/3} 100 SEK bills";
+                    return $"Withdrawal of {amount / 3} 100 SEK bills";
                 }
                 else
                 {
@@ -222,7 +247,7 @@ namespace ATM
             }
             else if (amount < 1000)
             {
-                if ((amount/500) > numberOf500 && (amount%500) > numberOf100) 
+                if ((amount / 500) > numberOf500 && (amount % 500) > numberOf100)
                 {
 
                 }
@@ -234,7 +259,7 @@ namespace ATM
             return "";
         }
 
-        
+
 
 
 
