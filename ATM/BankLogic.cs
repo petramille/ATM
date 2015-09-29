@@ -57,8 +57,8 @@ namespace ATM
 
             if ((tmpCustomer[2]) == "3")
             {
-                Session["ssn"] = tmpCustomer[0];
-                Session["name"] = tmpCustomer[1];
+                Session["ssn"] = (string)Session[tmpCustomer[0]];
+                Session["name"] = (string)Session[tmpCustomer[1]];
 
                 //myController.StoreHistory();
                 return "Ok";
@@ -120,7 +120,7 @@ namespace ATM
 
         private double CalculateAmountLeftToday(string accountNumber)
         {
-            string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
+            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
@@ -145,36 +145,20 @@ namespace ATM
                 return (string)Session["ssn"];
             }
             else
-            {
                 return null;
-            }
-                
         }
 
-        public string WithdrawFromAccount(int amount)
+        public void WithdrawFromAccount()
         {
-            Account myAccount = (Account)Session["account"];
-
-            if (myAccount.WithdrawMoney(amount)=="Ok")
-            {
-                //string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
-                return "Ok";
-            }
-            else if (myAccount.WithdrawMoney(amount) == "")
-            {
-
-            }
-
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
-            return "";
+
         }
 
-        public string GetAccountInformation(int amountOfLines)
+        public void GetAccountInformation()
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
-            return "";
         }
 
 
