@@ -32,18 +32,22 @@ namespace ATM
                 myErrorHandler.HandleErrorMessage("The system is out of service. Maintenance on-going");
             }
 
+            commandLine = $"SELECT bills100, bills200, bills500, bills1000 From Unit where Id = '{atmId}'";
 
-            bool billsLeft = myController.GetAmountOfBills(atmId);
-            if (!billsLeft)
-            {
-                myErrorHandler.HandleErrorMessage("The ATM is out of banknotes.");
-            }
+            List<string> bills = myController.readSingleColumnFromSQL(commandLine);
+            
 
-            bool receiptLeft = myController.GetReceiptLeft(atmId);
-            if (!receiptLeft)
-            {
-                myErrorHandler.HandleErrorMessage("No receipts can be given");
-            }
+            
+            //if (!billsLeft)
+            //{
+            //    myErrorHandler.HandleErrorMessage("The ATM is out of banknotes.");
+            //}
+
+           
+            //if (!receiptLeft)
+            //{
+            //    myErrorHandler.HandleErrorMessage("No receipts can be given");
+            //}
         }
 
 
@@ -55,7 +59,7 @@ namespace ATM
             //Checks number of login attempt
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
-            
+
             if ((tmpCustomer[2]) == "3")
             {
                 Session["ssn"] = (string)Session[tmpCustomer[0]];
@@ -100,33 +104,51 @@ namespace ATM
             string currency = accountDetails[1];
             string balance = accountDetails[2];
             string accountType = accountDetails[3];
+            Account account;
 
-            Account account = new Account(accountType, alias, accountNumber, balance, currency);
-            Session.Add("account", account);
-
-            //Gets details about specific account, calls GetAccount in DbController
-            //switch (accountType)
-            //{
-            //case "saving":
-            //double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
-            // SavingAccount account = new SavingAccount();
-
-            //    default:
-            //        break;
-            //}
+            switch (accountType)
+            {
+                case "1":
+                    double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
+                    account = new SavingsAccount(accountType, alias, accountNumber, balance, currency, withDrawmoneyLeftToday);
+                    Session.Add("account", account);
+                    break;
+               
+                default:
+                    account = new Account(accountType, alias, accountNumber, balance, currency);
+                    Session.Add("account", account);
+                    break;
+            }
 
 
         }
-        //test 
 
-            public bool CheckSessionState()
+        private double CalculateAmountLeftToday(string accountNumber)
+        {
+            string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
+
+            List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
+
+            double totalWithdrawnAmount = 0;
+            double withdrawnAmount = 0;
+
+            foreach (var value in amountValues)
+            {
+                withdrawnAmount = Convert.ToDouble(value);
+                totalWithdrawnAmount += withdrawnAmount;
+
+            }
+            return (5000 - totalWithdrawnAmount);
+        }
+
+        
+
+        public bool CheckSessionState()
         {
             if (Session["name"] != null && Session["ssn"] != null)
             {
                 return true;
-
             }
-
             else
                 return false;
         }
