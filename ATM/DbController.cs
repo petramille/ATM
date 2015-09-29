@@ -109,7 +109,7 @@ namespace ATM
 
         }
 
-        public void StoreHistory(DateTime eventTime, string eventType, int id, string accountNumber, string ipNumber, double transactionAmount)
+        public void StoreHistory(DateTime eventTime, string eventType, int id, string accountNumber, double transactionAmount)
         {
             try
             {
@@ -123,16 +123,16 @@ namespace ATM
 
                 command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
                 command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 10);
-                command.Parameters.Add("@UserID", System.Data.SqlDbType.VarChar, 12);
-                command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
+                command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
+               // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
                 command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.VarChar, 8);
 
 
                 command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;
-                command.Parameters["@UserID"].Value = id;               
-                command.Parameters["@IP"].Value = ipNumber;
+                command.Parameters["@Ssn"].Value = id;               
+                //command.Parameters["@IP"].Value = ipNumber;
                 command.Parameters["@AccountNr"].Value = accountNumber;
                 command.Parameters["@HandledAmount"].Value = transactionAmount;
                 
