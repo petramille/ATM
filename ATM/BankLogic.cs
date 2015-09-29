@@ -156,10 +156,12 @@ namespace ATM
         {
 
             Account myAccount = GetAccount(alias_accountNr);
+            string ssn = (string)Session["ssn"];
 
             if (myAccount.WithdrawMoney(amount)=="Ok")
             {
-                string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, amount);
+                string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
+                myAccount.Equals(null);
                 if (transferCompleted.Equals("1"))
                 {
                     return "Ok";
@@ -171,14 +173,15 @@ namespace ATM
             }
             else
             {
-                return myAccount.WithdrawMoney(amount);
+                string transferOk = myAccount.WithdrawMoney(amount);
+                myAccount.Equals(null);
+                return transferOk;
             }
-
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
         }
 
-        public List<string> GetAccountInformation( string alias_accountNr, int amountOfLines)
+        public List<string> GetAccountInformation(string alias_accountNr, int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
@@ -190,6 +193,7 @@ namespace ATM
 
             //addRange kanske strular??
             accountInformation.AddRange(myController.readFromSQL(commandLine));
+            myAccount.Equals(null);
             return accountInformation;
         }
 
