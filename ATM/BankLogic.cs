@@ -57,8 +57,8 @@ namespace ATM
 
             if ((tmpCustomer[2]) == "3")
             {
-                Session["ssn"] = (string)Session[tmpCustomer[0]];
-                Session["name"] = (string)Session[tmpCustomer[1]];
+                Session["ssn"] = tmpCustomer[0];
+                Session["name"] = tmpCustomer[1];
 
                 //myController.StoreHistory();
                 return "Ok";
@@ -114,12 +114,11 @@ namespace ATM
                     Session.Add("account", account);
                     break;
             }
-
-
         }
 
         private double CalculateAmountLeftToday(string accountNumber)
         {
+
             string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
@@ -145,20 +144,42 @@ namespace ATM
                 return (string)Session["ssn"];
             }
             else
+            {
                 return null;
+            }
+                
         }
 
-        public void WithdrawFromAccount()
+        public string WithdrawFromAccount(int amount)
         {
+            Account myAccount = (Account)Session["account"];
+
+            if (myAccount.WithdrawMoney(amount)=="Ok")
+            {
+                string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, amount);
+                if (transferCompleted.Equals("1"))
+                {
+                    return "Ok";
+                }
+                else
+                {
+                    return "Withdrawal of that amount was not possible";
+                }                
+            }
+            else
+            {
+                return myAccount.WithdrawMoney(amount);
+            }
+
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
-
         }
 
-        public void GetAccountInformation()
+        public string GetAccountInformation(int amountOfLines)
         {
             //GetAccountBalance(accountNumber);
             //GetAccountHistory(accountNumber);
+            return "";
         }
 
 

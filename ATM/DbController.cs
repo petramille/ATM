@@ -14,7 +14,7 @@ namespace ATM
         ErrorHandler myErrorHandler = new ErrorHandler();
 
 
-        //return List<string>
+       
         public List<string> FindUser(string ssn, string pin)
         {
 
@@ -65,6 +65,7 @@ namespace ATM
 
            
         }
+
         //Inte helt klar. Kolla med Hedvig när sp är klar
         public string WithdrawFromAccount(string accountNumber, double amount)
         {
