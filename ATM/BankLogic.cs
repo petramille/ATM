@@ -114,13 +114,12 @@ namespace ATM
                     Session.Add("account", account);
                     break;
             }
-
-
         }
 
         private double CalculateAmountLeftToday(string accountNumber)
         {
-            string commandLine = $"SELECT HandledAmount From ActivityLog where EventType = 'Withdraw' And Account='{accountNumber}'";
+
+            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
