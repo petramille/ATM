@@ -15,9 +15,9 @@ namespace ATM.Controllers
             BankLogic loginHandler = new BankLogic();
 
             // Change to string SSN instead of bool
-            bool sessionState = loginHandler.CheckSessionState();
+            string sessionState = loginHandler.CheckSessionState();
 
-            if (sessionState == true)
+            if (!string.IsNullOrEmpty(sessionState))
             {
                 List<string> getAccounts = loginHandler.GetAccountsById(Session["ssn"].ToString());
 
