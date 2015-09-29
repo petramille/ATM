@@ -128,12 +128,16 @@ namespace ATM
             double totalWithdrawnAmount = 0;
             double withdrawnAmount = 0;
 
-            foreach (var value in amountValues)
+            if (amountValues!=null)
             {
-                withdrawnAmount = Convert.ToDouble(value);
-                totalWithdrawnAmount += withdrawnAmount;
+                foreach (var value in amountValues)
+                {
+                    withdrawnAmount = Convert.ToDouble(value);
+                    totalWithdrawnAmount += withdrawnAmount;
 
+                }
             }
+            
             return (5000 - totalWithdrawnAmount);
         }
 
@@ -197,7 +201,7 @@ namespace ATM
             return accountInformation;
         }
 
-        public void HighlightButtonAvailable()
+        public string TransferBills(int amount)
         {
             List<string> bills = (List<string>)Session["numberOfBills"];
             int numberOf100 = Convert.ToInt32(bills[0]);
@@ -205,7 +209,29 @@ namespace ATM
             int numberOf500 = Convert.ToInt32(bills[2]);
             int numberOf1000 = Convert.ToInt32(bills[3]);
 
-            
+            if (amount<500)
+            {
+                if (numberOf100*100> amount)
+                {
+                    return $"Withdrawal of {amount/3} 100 SEK bills";
+                }
+                else
+                {
+                    return "false";
+                }
+            }
+            else if (amount < 1000)
+            {
+                if ((amount/500) > numberOf500 && (amount%500) > numberOf100) 
+                {
+
+                }
+                //else if (amount / 100) > numberOf100)
+                //{
+                //    
+                //}
+            }
+            return "";
         }
 
         
