@@ -7,21 +7,27 @@ namespace ATM
 {
     public class ErrorHandler
     {
+        public void HandleErrorMessage(string message)
+        {
+            //sends error message to error page
 
-        public int logInAttempts;
+        }
 
-
-
-        public void CheckLogInAttempts()
+        public string LogInAlarms(int logInAttempts)
         {
             //
-            //switch (logInAttempts)
-            //{
-            //case 1:
-            //case 2:
-            //case 3:
-            //    default:
-            //}
+            switch (logInAttempts)
+            {
+                case 0:
+                    return "YOU ARE SUCH A FAILURE!!! GO TO YOUR BANK TO ENABLE YOUR CARD AGAIN";
+                case 1:
+                    return "WRONG CODE AGAIN. YOU ONLY HAVE ONE ATTEMPT LEFT!!!!!!!";
+                case 2:
+                    return "Wrong code. You have two more attempts";
+                default:
+                    return "";
+            }
+            
         }
     }
 }

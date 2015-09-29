@@ -11,6 +11,7 @@ namespace ATM
     {
 
         DbController myController = new DbController();
+        ErrorHandler myErrorHandler = new ErrorHandler();
 
         public string LogIn(string ssn, int pin)
         {
@@ -21,23 +22,16 @@ namespace ATM
             if (Convert.ToInt32(tmpCustomer[2]) == 3)
             {
                 Session["name"] = (string)Session[tmpCustomer[0]];
-                Session["name"] = (string)Session[tmpCustomer[0]];
+                Session["ssn"] = (string)Session[tmpCustomer[1]];
+                //myController.StoreHistory();
+                return "Ok";
             }
-            else if (Convert.ToInt32(tmpCustomer[2]) == 2)
+            else
             {
-
+                string errorMessage = myErrorHandler.LogInAlarms(Convert.ToInt32(tmpCustomer[2]));
+                //myController.StoreHistory();
+                return errorMessage; 
             }
-            else if (Convert.ToInt32(tmpCustomer[2]) == 1)
-            {
-
-            }
-            else if (Convert.ToInt32(tmpCustomer[2]) == 0)
-            {
-
-            }
-            // StoreHistory()
-
-            return "";
         }
 
 
