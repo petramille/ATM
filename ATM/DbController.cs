@@ -67,7 +67,7 @@ namespace ATM
         }
 
         //Inte helt klar. Kolla med Hedvig när sp är klar
-        public List<string> WithdrawFromAccount(string accountNumber, double amount)
+        public string WithdrawFromAccount(string accountNumber, double amount)
         {
 
             try
@@ -82,20 +82,20 @@ namespace ATM
 
                 command.Parameters.Add("@AccountNR", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@WithdrawAmount", System.Data.SqlDbType.Float);
-                command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@Message", System.Data.SqlDbType.VarChar, 1);
 
 
                 command.Parameters["@AccountNR"].Value = accountNumber;
                 command.Parameters["@WithdrawAmount"].Value = amount;
-                command.Parameters["@ID"].Direction = System.Data.ParameterDirection.Output;
+                command.Parameters["@Message"].Direction = System.Data.ParameterDirection.Output;
 
                 command.ExecuteNonQuery();
 
-                List<string> tmpCustomer = new List<string>();
-                tmpCustomer.Add(System.Convert.ToString(command.Parameters["@ID"].Value));
+                string message;
+                message = System.Convert.ToString(command.Parameters["@Message"].Value);
 
                 myConnection.Close();
-                return tmpCustomer;
+                return message;
 
             }
             catch (Exception x)
