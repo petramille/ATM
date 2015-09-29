@@ -121,5 +121,96 @@ namespace ATM
             //select directly from db
             return true;
         }
+
+        public List<string> readFromSQL(string commandLine)
+        {
+            myConnection.ConnectionString = connectionString;
+            SqlDataReader myReader = null;
+
+            try
+            {
+                myConnection.Open();
+                command = new SqlCommand();
+                command.Connection = myConnection;
+
+                command.CommandText = commandLine;
+                myReader = command.ExecuteReader();
+
+                string mySQLResultLine = "";
+                List<string> mySQLResult = new List<string>();
+                while (myReader.Read())
+                {
+                    mySQLResultLine = "";
+                    for (int i = 0; i < myReader.FieldCount; i++)
+                    {
+                        mySQLResultLine += myReader[i].ToString() + " ";
+                    }
+                    mySQLResult.Add(mySQLResultLine);
+                }
+
+                return mySQLResult;
+
+            }
+            catch (Exception ex)
+            {
+                myErrorHandler.HandleErrorMessage("No connection found");
+                return null;
+            }
+            finally
+            {
+                if (myReader != null)
+                {
+                    myReader.Close();
+                }
+                if (myConnection != null)
+                {
+                    myConnection.Close();
+                }
+            }
+        }
+
+        public List<string> readSingleColumnFromSQL(string commandLine)
+        {
+            myConnection.ConnectionString = connectionString;
+            SqlDataReader myReader = null;
+
+            try
+            {
+                myConnection.Open();
+                command = new SqlCommand();
+                command.Connection = myConnection;
+
+                command.CommandText = commandLine;
+                myReader = command.ExecuteReader();
+
+                List<string> mySQLResult = new List<string>();
+                while (myReader.Read())
+                {
+                    for (int i = 0; i < myReader.FieldCount; i++)
+                    {
+                        mySQLResult.Add(myReader[i].ToString());
+                    }
+                }
+
+                return mySQLResult;
+
+            }
+            catch (Exception ex)
+            {
+                myErrorHandler.HandleErrorMessage("No connection found");
+                return null;
+            }
+            finally
+            {
+                if (myReader != null)
+                {
+                    myReader.Close();
+                }
+                if (myConnection != null)
+                {
+                    myConnection.Close();
+                }
+            }
+        }
     }
 }
