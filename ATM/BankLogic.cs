@@ -12,12 +12,12 @@ namespace ATM
 
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
-        
+
 
         /// <summary>
         /// First method to be called before login to the person account. Sends messages
-       ///  to the web page describing the status of the system and the ATM or if the ATM is out of money.
-       /// To add: Write to page if the ATM is out of receipts
+        ///  to the web page describing the status of the system and the ATM or if the ATM is out of money.
+        /// To add: Write to page if the ATM is out of receipts
         /// </summary>
         /// <param name="atmId">The unique ID of the ATM</param>
         public List<string> CheckATMStatus(string atmId)
@@ -25,7 +25,7 @@ namespace ATM
             string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
 
             List<string> status = myController.readSingleColumnFromSQL(commandLine);
-            if (status==null)
+            if (status == null)
             {
                 status.Add("false");
                 status.Add("No access to the ATM at the moment");
@@ -47,7 +47,7 @@ namespace ATM
             {
                 message.Add("false");
                 message.Add("The system is out of service. Maintenance on-going");
-               
+
             }
 
             commandLine = $"SELECT bills100, bills200, bills500, bills1000, Receipt From Unit where Id = '{atmId}'";
@@ -75,12 +75,12 @@ namespace ATM
         /// <returns>Error message describing the number of login tries left or "ok" if login was successful.</returns>
         public List<string> LogIn(string ssn, string pin)
         {
-            
+
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
 
             List<string> tmpList = new List<string>();
-            if (tmpCustomer==null)
+            if (tmpCustomer == null)
             {
                 tmpList.Add("false");
                 tmpList.Add("No access to the ATM at the moment");
@@ -100,7 +100,7 @@ namespace ATM
                 tmpList.Add("false");
                 tmpList.Add(errorMessage);
                 //myController.StoreHistory();
-                
+
             }
             return tmpList;
         }
@@ -141,7 +141,7 @@ namespace ATM
 
             List<string> accountDetails = myController.readSingleColumnFromSQL(commandLine);
 
-            if (accountDetails==null)
+            if (accountDetails == null)
             {
                 //connection failed
                 return null;
@@ -157,7 +157,7 @@ namespace ATM
             {
                 case "1":
                     double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
-                    if (withDrawmoneyLeftToday==(-1))
+                    if (withDrawmoneyLeftToday == (-1))
                     {
                         //cant withdraw more than 500 a day
                         return null;
@@ -165,12 +165,12 @@ namespace ATM
 
                     account = new SavingsAccount(accountType, alias, accountNumber, balance, currency, withDrawmoneyLeftToday);
                     return account;
-                    
-               
+
+
                 default:
                     account = new Account(accountType, alias, accountNumber, balance, currency);
                     return account;
-                    
+
             }
         }
 
@@ -185,7 +185,7 @@ namespace ATM
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
-            if (amountValues==null)
+            if (amountValues == null)
             {
                 // connection not possible
                 return -1;
@@ -206,7 +206,7 @@ namespace ATM
             return (5000 - totalWithdrawnAmount);
         }
 
-        
+
 
         public string CheckSessionState()
         {
@@ -218,7 +218,7 @@ namespace ATM
             {
                 return null;
             }
-                
+
         }
 
 
@@ -229,7 +229,7 @@ namespace ATM
 
             Account myAccount = GetAccount(alias_accountNr);
 
-            if (myAccount==null)
+            if (myAccount == null)
             {
                 result.Add("false");
                 result.Add("Technical Error");
@@ -238,7 +238,7 @@ namespace ATM
 
             string ssn = (string)Session["ssn"];
 
-            
+
 
             bool insertedAmountCorrect = CheckInsertedAmount(amount);
 
@@ -268,7 +268,7 @@ namespace ATM
                     result.Add("Withdrawal was not possible");
                     return result;
                 }
-               
+
                 else if (transferCompleted.Equals("1"))
                 {
                     DateTime presentTime = DateTime.Now;
@@ -283,7 +283,7 @@ namespace ATM
                     result.Add("false");
                     result.Add("Withdrawal of that amount was not possible");
                     return result;
-                }                
+                }
             }
             else
             {
@@ -326,11 +326,11 @@ namespace ATM
             }
 
             accountInformation.Add(myAccount.AccountAlias + " - " + myAccount.AccountNumber + " - Balance: " + myAccount.Balance + " " + myAccount.Currency);
-            
+
             string commandLine = $"SELECT Top {amountOfLines} EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw_success' And AccountNR='{myAccount.AccountNumber}' Order by EventTime DESC";
             List<string> informationRows = myController.readFromSQL(commandLine);
 
-            if (informationRows==null)
+            if (informationRows == null)
             {
                 accountInformation[0] = "false";
                 accountInformation.Add("No access to the ATM at the moment");
@@ -380,28 +380,28 @@ namespace ATM
             withdrawed100 = tmpResult[0];
             amount = tmpResult[1];
 
-            if (amount>0)
+            if (amount > 0)
             {
                 result.Add("false");
                 return result;
-                }
-                else
-                {
+            }
+            else
+            {
                 string atmId = (string)Session["ATMID"];
                 myController.UpdateNumberOfBills(atmId, withdrawed100, withdrawed200, withdrawed500, withdrawed1000);
 
                 result.Add("Ok");
-                result.Add(""+withdrawed100);
+                result.Add("" + withdrawed100);
                 result.Add("" + withdrawed200);
                 result.Add("" + withdrawed500);
                 result.Add("" + withdrawed1000);
                 return result;
                 //return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
-                }
             }
+        }
 
         private int[] GetBillsWithdrawn(int numberOfBillsInATM, int amount, int typeOfBill)
-                {
+        {
             int[] result = new int[2];
 
             int withdrawnBills;
@@ -410,7 +410,7 @@ namespace ATM
             {
                 withdrawnBills = amountOfBillsNeeded;
                 amount -= withdrawnBills * typeOfBill;
-                }
+            }
             else
             {
                 withdrawnBills = numberOfBillsInATM;
@@ -422,7 +422,7 @@ namespace ATM
         }
         public void subtractFromReceipt(int lengthOfReceipt, string atmId)
         {
-            string commandLine = $"Update Unit SET Receipt = Receipt - '{lengthOfReceipt}' where ID = '{atmId}'";
+            string commandLine = $"Update Unit SET Receipt = Receipt - {lengthOfReceipt} where ID = '{atmId}'";
             myController.editSQL(commandLine);
         }
 
