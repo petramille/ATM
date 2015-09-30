@@ -305,7 +305,7 @@ namespace ATM
                 return accountInformation;
             }
 
-            accountInformation.Add(myAccount.AccountAlias + " - " + myAccount.AccountNumber + "- Balance: " + myAccount.Balance + " " + myAccount.Currency);
+            accountInformation.Add(myAccount.AccountAlias + " - " + myAccount.AccountNumber + " - Balance: " + myAccount.Balance + " " + myAccount.Currency);
             
             string commandLine = $"SELECT Top {amountOfLines} EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw_success' And AccountNR='{myAccount.AccountNumber}' Order by EventTime DESC";
             List<string> informationRows = myController.readFromSQL(commandLine);
@@ -319,7 +319,7 @@ namespace ATM
             string tmpString;
             foreach (var infoRow in informationRows)
             {
-                tmpString = infoRow.Replace("withdraw_success", "Withdraw");
+                tmpString = infoRow.Replace("Withdraw_success", "Withdraw");
                 tmpString += " SEK";
                 accountInformation.Add(tmpString);
 
