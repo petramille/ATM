@@ -100,10 +100,11 @@ namespace ATM
 
         /// <summary>
         /// The row containing the alias and account number is splitted when ' '.
-        /// SQL Splittar först raden som står i listan för att få ut kontonumret. Hämtar sedan
-        /// information från kontot och skapar kontot för att kunna få specifik logik.
+        /// SQL query gets all account details associated with the specific account.
+        /// Creates an instance of an Account object.
         /// </summary>
-        /// <param name="alias_accountNr">Tar raden som står i listan av konton</param>
+        /// <param name="alias_accountNr">A string containing both the alias and the account number of the selected account</param>
+        /// <returns>The Account containing all account details</returns>
         public Account GetAccount(string alias_accountNr)
         {
             string[] splittedLine = alias_accountNr.Split(' ');
@@ -134,9 +135,13 @@ namespace ATM
             }
         }
 
+        /// <summary>
+        /// Checks the amount of money withdrawn during  
+        /// </summary>
+        /// <param name="accountNumber"></param>
+        /// <returns></returns>
         private double CalculateAmountLeftToday(string accountNumber)
         {
-
             string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
