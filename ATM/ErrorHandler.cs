@@ -19,7 +19,7 @@ namespace ATM
             switch (logInAttempts)
             {
                 case "0":
-                    return "YOU ARE SUCH A FAILURE!!! GO TO YOUR BANK TO ENABLE YOUR CARD AGAIN";
+                    return "YOU ARE SUCH A FAILURE!!!\n GO TO YOUR BANK TO ENABLE YOUR CARD AGAIN";
                 case "1":
                     return "WRONG CODE AGAIN. YOU ONLY HAVE ONE ATTEMPT LEFT!!!!!!!";
                 case "2":
