@@ -177,8 +177,6 @@ namespace ATM
                 command.Parameters.Add("@Bills500", System.Data.SqlDbType.Int);
                 command.Parameters.Add("@Bills1000", System.Data.SqlDbType.Int);
 
-
-
                 command.Parameters["@ID"].Value = id;
                 command.Parameters["@Bills100"].Value = withdrawed100;
                 command.Parameters["@Bills200"].Value = withdrawed200;
@@ -192,7 +190,7 @@ namespace ATM
             }
             catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+                myErrorHandler.HandleErrorMessage("The number of bills could not be updated");
 
             }
         
