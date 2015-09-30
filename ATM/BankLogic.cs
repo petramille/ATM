@@ -307,7 +307,7 @@ namespace ATM
 
             accountInformation.Add(myAccount.AccountAlias + ", AccountNumber: " + myAccount.AccountNumber + ", Balance: " + myAccount.Balance + ", Currency: " + myAccount.Currency);
             
-            string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
+            string commandLine = $"SELECT Top {amountOfLines} EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
 
             List<string> informationRows = myController.readFromSQL(commandLine);
             foreach (var infoRow in informationRows)
