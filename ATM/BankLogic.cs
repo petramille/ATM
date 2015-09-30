@@ -263,6 +263,7 @@ namespace ATM
 
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
                 
+               
                 if (transferCompleted.Equals("1"))
                 {
                     DateTime presentTime = DateTime.Now;
