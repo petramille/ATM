@@ -305,18 +305,24 @@ namespace ATM
                 return accountInformation;
             }
 
-            accountInformation.Add(myAccount.AccountAlias + ", AccountNumber: " + myAccount.AccountNumber + ", Balance: " + myAccount.Balance + ", Currency: " + myAccount.Currency);
+            accountInformation.Add(myAccount.AccountAlias + " - " + myAccount.AccountNumber + "- Balance: " + myAccount.Balance + " " + myAccount.Currency);
             
             string commandLine = $"SELECT Top {amountOfLines} EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw_success' And AccountNR='{myAccount.AccountNumber}' Order by EventTime DESC";
             List<string> informationRows = myController.readFromSQL(commandLine);
 
             if (informationRows==null)
             {
+                accountInformation[0] = "false";
+                accountInformation.Add("No access to the ATM at the moment");
 
             }
+            string tmpString;
             foreach (var infoRow in informationRows)
             {
-                accountInformation.Add(infoRow);
+                tmpString = infoRow.Replace("withdraw_success", "Withdraw");
+                tmpString += " SEK";
+                accountInformation.Add(tmpString);
+
             }
             myAccount.Equals(null);
             return accountInformation;
