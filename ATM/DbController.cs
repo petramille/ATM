@@ -16,32 +16,25 @@ namespace ATM
         static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
         SqlConnection myConnection = new SqlConnection();
         SqlCommand command = new SqlCommand();
-        ErrorHandler myErrorHandler = new ErrorHandler();
 
 
-       /// <summary>
-       /// Checks if login is valid and user exists. 
-       /// </summary>
-       /// <param name="ssn">social security number and cardnumber</param>
-       /// <param name="pin">pin-code</param>
-       /// <returns>List<string> with  </returns>
+
+        /// <summary>
+        /// Checks if login is valid and user exists. 
+        /// </summary>
+        /// <param name="ssn">social security number and cardnumber</param>
+        /// <param name="pin">pin-code</param>
+        /// <returns>List<string> with UserId, first name and number of login tries. null if connection fails</returns>
         public List<string> FindUser(string ssn, string pin)
         {
-
-            //Checks if login is valid and if user exists
-            //Gets id, first name and number of attempts to login
-
-            //save in session
-            //sp
             try
             {
                 command.Connection = myConnection;
-                myConnection.ConnectionString =connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+                myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
                 myConnection.Open();
 
                 command.CommandText = "SP_Login";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-                //command.Parameters.Clear();
 
                 command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 12);
                 command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 4);
@@ -65,18 +58,21 @@ namespace ATM
 
                 myConnection.Close();
                 return tmpCustomer;
-
             }
             catch (Exception)
             {
                 //myErrorHandler.HandleErrorMessage("No access to the ATM at the moment");
                 return null;
             }
-
-           
         }
 
-        
+        /// <summary>
+        /// Calls stored procedure to Withdraw money from a account
+        /// </summary>
+        /// <param name="accountNumber">Account number where money should be withdrawn</param>
+        /// <param name="ssn">social security number/cardnumber </param>
+        /// <param name="amount">amount to withdraw</param>
+        /// <returns> string with number 1 if success and 0 if unsuccess</returns>
         public string WithdrawFromAccount(string accountNumber, string ssn, double amount)
         {
 
@@ -88,7 +84,6 @@ namespace ATM
 
                 command.CommandText = "SP_WithdrawMoney";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-                //command.Parameters.Clear();
 
                 command.Parameters.Add("@AccountNR", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
@@ -112,13 +107,19 @@ namespace ATM
             }
             catch (Exception)
             {
-               
+
                 return null;
             }
-
-
         }
 
+        /// <summary>
+        /// Stores history in db by a stored procedure. 
+        /// </summary>
+        /// <param name="eventTime">time when logging happens</param>
+        /// <param name="eventType">type of event to log. exampel is withdraw. can not be null!!</param>
+        /// <param name="ssn">social security number/cardnumber. Can not be null </param>
+        /// <param name="accountNumber">Account number where the action happened. Can be null</param>
+        /// <param name="transactionAmount">The amount of the transaction. Can be null</param>
         public void StoreHistory(DateTime eventTime, string eventType, string ssn, string accountNumber, double transactionAmount)
         {
             try
@@ -134,18 +135,17 @@ namespace ATM
                 command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
                 command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 20);
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
-               // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
+                // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
                 command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.VarChar, 8);
 
-
                 command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;
-                command.Parameters["@Ssn"].Value = ssn;               
+                command.Parameters["@Ssn"].Value = ssn;
                 //command.Parameters["@IP"].Value = ipNumber;
                 command.Parameters["@AccountNr"].Value = accountNumber;
                 command.Parameters["@HandledAmount"].Value = transactionAmount;
-                
+
 
                 command.ExecuteNonQuery();
                 myConnection.Close();
@@ -153,13 +153,20 @@ namespace ATM
             }
             catch (Exception)
             {
-               
-               
+
+
             }
         }
 
-        
-       public void UpdateNumberOfBills(string id, int withdrawed100, int withdrawed200, int withdrawed500, int withdrawed1000)
+        /// <summary>
+        /// Updates the amount of bills in the atm after a withdrawal
+        /// </summary>
+        /// <param name="atmId">each atm has an Id</param>
+        /// <param name="withdrawed100">amount of 100 SEK bills that should be subtracted</param>
+        /// <param name="withdrawed200">amount of 200 SEK bills that should be subtracted</param>
+        /// <param name="withdrawed500">amount of 500 SEK bills that should be subtracted</param>
+        /// <param name="withdrawed1000">amount of 1000 SEK bills that should be subtracted</param>
+        public void UpdateNumberOfBills(string atmId, int withdrawed100, int withdrawed200, int withdrawed500, int withdrawed1000)
         {
             try
             {
@@ -177,12 +184,11 @@ namespace ATM
                 command.Parameters.Add("@Bills500", System.Data.SqlDbType.Int);
                 command.Parameters.Add("@Bills1000", System.Data.SqlDbType.Int);
 
-                command.Parameters["@ID"].Value = id;
+                command.Parameters["@ID"].Value = atmId;
                 command.Parameters["@Bills100"].Value = withdrawed100;
                 command.Parameters["@Bills200"].Value = withdrawed200;
                 command.Parameters["@Bills500"].Value = withdrawed500;
                 command.Parameters["@Bills1000"].Value = withdrawed1000;
-
 
                 command.ExecuteNonQuery();
                 myConnection.Close();
@@ -190,12 +196,15 @@ namespace ATM
             }
             catch (Exception)
             {
-               
 
             }
-        
-    }
+        }
 
+        /// <summary>
+        /// Reads from db. Ads everything per found item in one line
+        /// </summary>
+        /// <param name="commandLine">QueryLine</param>
+        /// <returns> List<string> with the result of the query</returns>
         public List<string> readFromSQL(string commandLine)
         {
             myConnection.ConnectionString = connectionString;
@@ -212,7 +221,7 @@ namespace ATM
 
                 string mySQLResultLine = "";
                 List<string> mySQLResult = new List<string>();
-                if (myReader!=null)
+                if (myReader != null)
                 {
                     while (myReader.Read())
                     {
@@ -229,12 +238,9 @@ namespace ATM
                 {
                     return null;
                 }
-                
-
             }
             catch (Exception ex)
             {
-                
                 return null;
             }
             finally
@@ -250,6 +256,11 @@ namespace ATM
             }
         }
 
+        /// <summary>
+        /// reads from db ads everything thats found in a List<string>
+        /// </summary>
+        /// <param name="commandLine">QueryLine</param>
+        /// <returns>List<string> of items found</returns>
         public List<string> readSingleColumnFromSQL(string commandLine)
         {
             myConnection.ConnectionString = connectionString;
@@ -267,7 +278,6 @@ namespace ATM
                 List<string> mySQLResult = new List<string>();
                 if (myReader != null)
                 {
-
                     while (myReader.Read())
                     {
                         for (int i = 0; i < myReader.FieldCount; i++)
@@ -281,11 +291,9 @@ namespace ATM
                 {
                     return null;
                 }
-
             }
             catch (Exception ex)
             {
-               
                 return null;
             }
             finally
@@ -301,7 +309,11 @@ namespace ATM
             }
         }
 
-        public void editSQL(string commandLine)
+        /// <summary>
+        /// Edits in db by a query
+        /// </summary>
+        /// <param name="commandLine">Query line</param>
+        public void EditSQL(string commandLine)
         {
             myConnection.ConnectionString = connectionString;
             SqlDataReader myReader = null;
