@@ -175,10 +175,10 @@ namespace ATM
         }
 
         /// <summary>
-        /// Checks the amount of money withdrawn during  
+        /// Checks the amount of money withdrawn during that day using a SQL query.
         /// </summary>
-        /// <param name="accountNumber"></param>
-        /// <returns></returns>
+        /// <param name="accountNumber">The number of account to be checked</param>
+        /// <returns>The amount that still can be withdrawn during that day</returns>
         private int CalculateAmountLeftToday(string accountNumber)
         {
             string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw_success' And AccountNR='{accountNumber}'";
@@ -207,7 +207,10 @@ namespace ATM
         }
 
 
-
+        /// <summary>
+        /// Checks if sessions containing the name and SSN of the person are valid
+        /// </summary>
+        /// <returns>The SSN for the person who is logged in</returns>
         public string CheckSessionState()
         {
             if (Session["name"] != null && Session["ssn"] != null)
@@ -222,7 +225,15 @@ namespace ATM
         }
 
 
-        //Discuss the string that is returned. Maybe now it is supposed to be "ok" at some point when evaluated in the controller!!!
+        /// <summary>
+        /// Calls the GetAccount method to create an instance of the present Account. 
+        /// Calls the WithdrawMoney method in Account class to check if the withdrawal is possible. Gets ok or false back together with a message.
+        /// If the amount is withdrawn, StoreHistory is called to log the event.
+        /// </summary>
+        /// <param name="amount">The amount the person wants to withdraw</param>
+        /// <param name="alias_accountNr">The account alias and the account number combined into one string</param>
+        /// <returns>A list where the first position is "ok" if it is possible to withdraw money and "false" if it is ot.
+       ///  In the "false" case, the second position contains the error message to be displayed.</returns>
         public List<string> WithdrawFromAccount(int amount, string alias_accountNr)
         {
             List<string> result = new List<string>();
@@ -298,6 +309,11 @@ namespace ATM
         }
 
 
+        /// <summary>
+        /// Checks if the requested amount can be delivered in even 100 kr bills.
+        /// </summary>
+        /// <param name="amount">The amount to be withdrawn</param>
+        /// <returns>True if the amount is ok, else false</returns>
         private bool CheckInsertedAmount(int amount)
         {
             if (amount % 100 == 0)
@@ -312,7 +328,14 @@ namespace ATM
         }
 
 
-
+        /// <summary>
+        /// New instance of Account is created by calling GetAccount to get the account details needed. 
+        /// A SQL query gets the events in the activity log.
+        /// </summary>
+        /// <param name="alias_accountNr">Both the account alias and the account number in one string</param>
+        /// <param name="amountOfLines">The number of lines that will be displayed on the page/the receipt</param>
+        /// <returns>List where the first position tells if the information was successfully delivered ("ok"/"false".
+        /// The second position is an error message if false and information about the activities if "ok"</returns>
         public List<string> GetAccountInformation(string alias_accountNr, int amountOfLines)
         {
             List<string> accountInformation = new List<string>();
@@ -350,6 +373,12 @@ namespace ATM
             return accountInformation;
         }
 
+        /// <summary>
+        ///  Calls the GetBillsWithdrawn method to get the amount of bills to b withdrawn.
+        /// Calls the UpdateNumberOfBills method in Db controller to communicate the number of bills withdrawn.
+        /// </summary>
+        /// <param name="amount">The amount to be withdrawn from account</param>
+        /// <returns>List containing "ok" or "false" at the first position and the number of teh different bill types that have been withdrawn</returns>
         public List<string> TransferBills(int amount)
         {
             List<string> bills = (List<string>)Session["numberOfBills"];
@@ -400,6 +429,13 @@ namespace ATM
             }
         }
 
+        /// <summary>
+        /// Calculates the number of different bills to be withdrawn.
+        /// </summary>
+        /// <param name="numberOfBillsInATM">Number of bills of the specific type in the specific ATM</param>
+        /// <param name="amount">Amount to be withdrawn</param>
+        /// <param name="typeOfBill">Type of bill; 100, 200 etc.</param>
+        /// <returns>Array with the number of withdrawn bills of the specific type and the amount wihdrawn of that type</returns>
         private int[] GetBillsWithdrawn(int numberOfBillsInATM, int amount, int typeOfBill)
         {
             int[] result = new int[2];
@@ -421,10 +457,22 @@ namespace ATM
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lengthOfReceipt">The length of the receipt (1 or 2) to be printed </param>
+        /// <param name="atmId"></param>
         public void subtractFromReceipt(int lengthOfReceipt, string atmId)
         {
             string commandLine = $"Update Unit SET Receipt = Receipt - {lengthOfReceipt} where ID = '{atmId}'";
             myController.EditSQL(commandLine);
+        }
+
+        public void LoggingOfEvents(string eventType, string ssn, string accountNumber, double transactionAmount)
+        {
+            DateTime dateTimeNow = DateTime.Now;
+
+            myController.StoreHistory(dateTimeNow, eventType, ssn, accountNumber, transactionAmount);
         }
 
     }
