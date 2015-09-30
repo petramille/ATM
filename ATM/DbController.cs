@@ -132,14 +132,14 @@ namespace ATM
                 command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.Clear();
 
-                command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
+                //command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
                 command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 20);
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
                 // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
                 command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.Float);
 
-                command.Parameters["@EventTime"].Value = eventTime;
+                //command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;
                 command.Parameters["@Ssn"].Value = ssn;
                 //command.Parameters["@IP"].Value = ipNumber;

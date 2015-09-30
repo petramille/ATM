@@ -48,9 +48,11 @@ namespace ATM.Controllers
 
         public ActionResult Done()
         {
+            BankLogic bankLogic = new BankLogic();
+
             string ssn = (string)Session["SSN"];
 
-
+            bankLogic.LoggingOfEvents("Logout_success", ssn, null, 0);
 
             Session.Abandon();
 
