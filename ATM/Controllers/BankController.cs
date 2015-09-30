@@ -156,6 +156,10 @@ namespace ATM.Controllers
                     accountInfo.accountRaw = accountNumber;
                     accountInfo.account = accountHistory[0];
 
+                    string ssn = (string)Session["SSN"];
+
+                    bankLogic.LoggingOfEvents("View_amount", ssn, accountNumber, 0);
+
                     return View(accountInfo);
                 }
             }
@@ -256,6 +260,10 @@ namespace ATM.Controllers
                 receipt.acc = acc;
                 receipt.sum = quantity;
 
+                string ssn = (string)Session["SSN"];
+
+                bankLogic.LoggingOfEvents("Print_Success", ssn, null, 0);
+
                 return View(receipt);
             } else if (!string.IsNullOrEmpty(acc) && string.IsNullOrEmpty(quantity))
             {
@@ -270,6 +278,10 @@ namespace ATM.Controllers
                 {
                     receipt.entry.Add(accountHistory[i]);
                 }
+
+                string ssn = (string)Session["SSN"];
+
+                bankLogic.LoggingOfEvents("Print_Success", ssn, null, 0);
 
                 return View(receipt);
             }
