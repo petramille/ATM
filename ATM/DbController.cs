@@ -172,17 +172,24 @@ namespace ATM
 
                 string mySQLResultLine = "";
                 List<string> mySQLResult = new List<string>();
-                while (myReader.Read())
+                if (myReader!=null)
                 {
-                    mySQLResultLine = "";
-                    for (int i = 0; i < myReader.FieldCount; i++)
+                    while (myReader.Read())
                     {
-                        mySQLResultLine += myReader[i].ToString() + " ";
+                        mySQLResultLine = "";
+                        for (int i = 0; i < myReader.FieldCount; i++)
+                        {
+                            mySQLResultLine += myReader[i].ToString() + " ";
+                        }
+                        mySQLResult.Add(mySQLResultLine);
                     }
-                    mySQLResult.Add(mySQLResultLine);
+                    return mySQLResult;
                 }
-
-                return mySQLResult;
+                else
+                {
+                    return null;
+                }
+                
 
             }
             catch (Exception ex)
@@ -218,15 +225,22 @@ namespace ATM
                 myReader = command.ExecuteReader();
 
                 List<string> mySQLResult = new List<string>();
-                while (myReader.Read())
+                if (myReader != null)
                 {
-                    for (int i = 0; i < myReader.FieldCount; i++)
-                    {
-                        mySQLResult.Add(myReader[i].ToString());
-                    }
-                }
 
-                return mySQLResult;
+                    while (myReader.Read())
+                    {
+                        for (int i = 0; i < myReader.FieldCount; i++)
+                        {
+                            mySQLResult.Add(myReader[i].ToString());
+                        }
+                    }
+                    return mySQLResult;
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             catch (Exception ex)
