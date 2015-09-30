@@ -132,6 +132,7 @@ namespace ATM
 
             if (accountDetails==null)
             {
+                //connection failed
                 return null;
             }
 
@@ -147,6 +148,7 @@ namespace ATM
                     double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
                     if (withDrawmoneyLeftToday==(-1))
                     {
+                        //cant withdraw more than 500 a day
                         return null;
                     }
 
@@ -168,14 +170,14 @@ namespace ATM
         /// <returns></returns>
         private int CalculateAmountLeftToday(string accountNumber)
         {
-            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
+            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw_success' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
             if (amountValues==null)
             {
+                // connection not possible
                 return -1;
-
             }
 
             int totalWithdrawnAmount = 0;
@@ -307,12 +309,10 @@ namespace ATM
             
             string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
 
-            //addRange kanske strular??
             foreach (var infoRow in myController.readFromSQL(commandLine))
             {
                 accountInformation.Add(infoRow);
             }
-            //accountInformation.AddRange(myController.readFromSQL(commandLine));
             myAccount.Equals(null);
             return accountInformation;
         }
