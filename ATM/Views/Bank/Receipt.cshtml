@@ -39,6 +39,9 @@
                     @if (!string.IsNullOrEmpty(Model.entry[0]))
                     {
                         <div style="text-align: left; padding-left: 40px;">
+                            <h4><b>Selected account:</b></h4>
+                            <h4>@Model.acc</h4>
+                            <br />
                             @foreach (var entry in Model.entry)
                             {
                                 <h4><b>Account event:</b></h4>

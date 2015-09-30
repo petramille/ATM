@@ -27,6 +27,7 @@
         <div class="col-md-4">
             @using (Html.BeginForm("Receipt", "Bank", FormMethod.Post))
             {
+                <input type="hidden" name="quantity" value="@Model.account" />
                 <input type="hidden" name="accRaw" value="@Model.accountRaw" />
                 <button class="form-control" name="acc" value="@Model.account" @Model.receipt>Get receipt</button><br />
             }

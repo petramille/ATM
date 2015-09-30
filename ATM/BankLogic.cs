@@ -469,7 +469,7 @@ namespace ATM
         }
 
         /// <summary>
-        /// 
+        /// Logs all events that are supposed to be stored in the db
         /// </summary>
         /// <param name="eventType">Type of event being logged</param>
         /// <param name="ssn">SSN of person doing the activity</param>
