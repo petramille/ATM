@@ -264,7 +264,7 @@ namespace ATM
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
                 if (transferCompleted == null)
                 {
-                    result.Add("false");
+                    
                     result.Add("Withdrawal was not possible");
                     return result;
                 }
