@@ -458,16 +458,23 @@ namespace ATM
         }
 
         /// <summary>
-        /// 
+        /// Calls Sql query that updates number of receipts in db
         /// </summary>
         /// <param name="lengthOfReceipt">The length of the receipt (1 or 2) to be printed </param>
-        /// <param name="atmId"></param>
+        /// <param name="atmId">ID of the ATM affected</param>
         public void subtractFromReceipt(int lengthOfReceipt, string atmId)
         {
             string commandLine = $"Update Unit SET Receipt = Receipt - {lengthOfReceipt} where ID = '{atmId}'";
             myController.EditSQL(commandLine);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventType">Type of event being logged</param>
+        /// <param name="ssn">SSN of person doing the activity</param>
+        /// <param name="accountNumber">Account number affected</param>
+        /// <param name="transactionAmount">Amount to be withdrawn if event type is withdraw</param>
         public void LoggingOfEvents(string eventType, string ssn, string accountNumber, double transactionAmount)
         {
             DateTime dateTimeNow = DateTime.Now;
