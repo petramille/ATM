@@ -252,20 +252,19 @@ namespace ATM
 
             if (myAccount.WithdrawMoney(amount) == "Ok")
             {
+                result = TransferBills(amount);
+                if (result[0] == "false")
+                {
+                    myAccount.Equals(null);
+
+                    result.Add("That combination of bills does not exist, try another amount");
+                    return result;
+                }
+
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
                 
                 if (transferCompleted.Equals("1"))
                 {
-                    result = TransferBills(amount);
-                    if (result[0] == "false")
-                    {
-                        myAccount.Equals(null);
-                        
-                        result.Add("That combination of bills does not exist, try another amount");
-                        return result;
-                    }
-
-
                     DateTime presentTime = DateTime.Now;
                     myController.StoreHistory(presentTime, myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
                     myAccount.Equals(null);
