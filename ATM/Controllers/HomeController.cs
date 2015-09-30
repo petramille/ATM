@@ -11,9 +11,14 @@ namespace ATM.Controllers
     {
         public ActionResult Index()
         {
-            string checkStatus = "Ok";
+            BankLogic ATMStatus = new BankLogic();
 
-            // checkStatus = CheckDatabase();
+            //string ATMID = "A1"; // Out of Service
+            string ATMID = "B2"; // OK
+            //string ATMID = "A2"; // Low amount of currency
+            //string ATMID = "C1"; // No currency
+
+            string checkStatus = ATMStatus.CheckATMStatus(ATMID);
 
             if (checkStatus == "Ok")
             {

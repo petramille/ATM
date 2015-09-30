@@ -1,7 +1,17 @@
-﻿
+﻿@model ATM.Models.WithdrawalConfirmation
 @{
     ViewBag.Title = "Landing";
 }
 
-<h2>Landing</h2>
-
+<div class="row row-centered">
+    <h2>Confirmation</h2>
+    <br />
+    <br />
+    <br />
+    <br />
+    <b>You have taken out @Model.sum from account @Model.account</b>
+    <br />
+    <br />
+    <br />
+    <button class="form-control" value="@Model.account">Get recept</button><br />
+</div>

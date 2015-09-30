@@ -35,4 +35,10 @@ namespace ATM.Models
             this.account = new List<string>();
         }
     }
+
+    public class WithdrawalConfirmation
+    {
+        public string sum { get; set; }
+        public string account { get; set; }
+    }
 }

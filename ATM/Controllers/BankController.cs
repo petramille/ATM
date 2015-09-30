@@ -210,7 +210,12 @@ namespace ATM.Controllers
 
             if (message == "Ok")
             {
-                return View();
+                WithdrawalConfirmation confirm = new WithdrawalConfirmation();
+
+                confirm.sum = quantity;
+                confirm.account = account;
+
+                return View(confirm);
             }
             else
             {
