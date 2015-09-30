@@ -13,6 +13,12 @@ namespace ATM
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
 
+        /// <summary>
+        /// First method to be called before login to the person account. Sends messages
+       ///  to the web page describing the status of the system and the ATM or if the ATM is out of money.
+       /// To add: Write to page if the ATM is out of receipts
+        /// </summary>
+        /// <param name="atmId">The unique ID of the ATM</param>
         public void CheckATMStatus(int atmId)
         {
             string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
@@ -48,12 +54,16 @@ namespace ATM
         }
 
 
+        /// <summary>
+        /// Checks if valid login. Checks number of login attempt.
+        /// Saves ssn and the name of the person in a session.
+        /// </summary>
+        /// <param name="ssn">The SSN of the person who logs in</param>
+        /// <param name="pin">Pin code</param>
+        /// <returns>Error message describing the number of login tries left or "ok" if login was successful.</returns>
         public string LogIn(string ssn, string pin)
         {
-
-
-            //Checks if valid login. Gets user details and account numbers from database. 
-            //Checks number of login attempt
+            
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
 
@@ -74,17 +84,21 @@ namespace ATM
         }
 
 
-
+        /// <summary>
+        /// Gets all account alias and account numbers associated with the specific person SSN using a SQL query.
+        /// </summary>
+        /// <param name="ssn">Person SSN</param>
+        /// <returns>A list with alias and account numbers for the person logged in</returns>
         public List<string> GetAccountsById(string ssn)
         {
-            //Gets all accountalias and accountnumber associated with the specifc person id, calls GetAccounts in 
             string commandLine = $"SELECT Alias, Account.AccountNR From Account, Controller  where  Controller.SSN = '{ssn}' And Controller.AccountNR=Account.AccountNR";
             return myController.readFromSQL(commandLine);
 
         }
 
         /// <summary>
-        /// Splittar först raden som står i listan för att få ut kontonumret. Hämtar sedan
+        /// The row containing the alias and account number is splitted when ' '.
+        /// SQL Splittar först raden som står i listan för att få ut kontonumret. Hämtar sedan
         /// information från kontot och skapar kontot för att kunna få specifik logik.
         /// </summary>
         /// <param name="alias_accountNr">Tar raden som står i listan av konton</param>
