@@ -251,7 +251,7 @@ namespace ATM.Controllers
         {
             BankLogic bankLogic = new BankLogic();
 
-            if (!string.IsNullOrEmpty(acc) && !string.IsNullOrEmpty(quantity))
+            if (string.IsNullOrEmpty(accRaw))
             {
                 bankLogic.subtractFromReceipt(1, (string)Session["ATMID"]);
 
@@ -265,7 +265,7 @@ namespace ATM.Controllers
                 bankLogic.LoggingOfEvents("Print_Success", ssn, null, 0);
 
                 return View(receipt);
-            } else if (!string.IsNullOrEmpty(acc) && string.IsNullOrEmpty(quantity))
+            } else if (!string.IsNullOrEmpty(accRaw))
             {
                 Receipt receipt = new Receipt();
 
