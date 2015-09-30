@@ -24,6 +24,12 @@ namespace ATM
             string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
 
             List<string> status = myController.readSingleColumnFromSQL(commandLine);
+            if (status==null)
+            {
+                return "No access to the ATM at the moment";
+
+            }
+
             string message = "";
 
             if (status[0] == "0")
@@ -67,6 +73,11 @@ namespace ATM
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
 
+            if (tmpCustomer==null)
+            {
+                return "No access to the ATM at the moment";
+            }
+
             if ((tmpCustomer[2]) == "3")
             {
                 Session["ssn"] = tmpCustomer[0];
@@ -92,7 +103,14 @@ namespace ATM
         public List<string> GetAccountsById(string ssn)
         {
             string commandLine = $"SELECT Alias, Account.AccountNR From Account, Controller  where  Controller.SSN = '{ssn}' And Controller.AccountNR=Account.AccountNR";
-            return myController.readFromSQL(commandLine);
+            List<string> tmpAccounts = myController.readFromSQL(commandLine);
+            if (tmpAccounts == null)
+            {
+                tmpAccounts.Add("false");
+                tmpAccounts.Add("No access to the ATM at the moment");
+            }
+
+            return tmpAccounts;
 
         }
 
@@ -103,7 +121,7 @@ namespace ATM
         /// </summary>
         /// <param name="alias_accountNr">A string containing both the alias and the account number of the selected account</param>
         /// <returns>The Account containing all account details</returns>
-        public Account GetAccount(string alias_accountNr)
+        private Account GetAccount(string alias_accountNr)
         {
             string[] splittedLine = alias_accountNr.Split(' ');
             string accountNumber = splittedLine[1];
@@ -111,6 +129,11 @@ namespace ATM
             string commandLine = $"SELECT Alias, Currency, Amount, AccountType From Account where AccountNR= '{accountNumber}'";
 
             List<string> accountDetails = myController.readSingleColumnFromSQL(commandLine);
+
+            if (accountDetails==null)
+            {
+                return null;
+            }
 
             string alias = accountDetails[0];
             string currency = accountDetails[1];
@@ -122,6 +145,11 @@ namespace ATM
             {
                 case "1":
                     double withDrawmoneyLeftToday = CalculateAmountLeftToday(accountNumber);
+                    if (withDrawmoneyLeftToday==(-1))
+                    {
+                        return null;
+                    }
+
                     account = new SavingsAccount(accountType, alias, accountNumber, balance, currency, withDrawmoneyLeftToday);
                     return account;
                     
@@ -138,25 +166,30 @@ namespace ATM
         /// </summary>
         /// <param name="accountNumber"></param>
         /// <returns></returns>
-        private double CalculateAmountLeftToday(string accountNumber)
+        private int CalculateAmountLeftToday(string accountNumber)
         {
             string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw' And Account='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
-            double totalWithdrawnAmount = 0;
-            double withdrawnAmount = 0;
+            if (amountValues==null)
+            {
+                return -1;
+
+            }
+
+            int totalWithdrawnAmount = 0;
+            int withdrawnAmount = 0;
 
             if (amountValues != null)
             {
                 foreach (var value in amountValues)
                 {
-                    withdrawnAmount = Convert.ToDouble(value);
+                    withdrawnAmount = Convert.ToInt32(value);
                     totalWithdrawnAmount += withdrawnAmount;
 
                 }
             }
-            
             return (5000 - totalWithdrawnAmount);
         }
 
@@ -179,11 +212,20 @@ namespace ATM
         //Discuss the string that is returned. Maybe now it is supposed to be "ok" at some point when evaluated in the controller!!!
         public List<string> WithdrawFromAccount(int amount, string alias_accountNr)
         {
+            List<string> result = new List<string>();
 
             Account myAccount = GetAccount(alias_accountNr);
+
+            if (myAccount==null)
+            {
+                result.Add("false");
+                result.Add("Technical Error");
+                return result;
+            }
+
             string ssn = (string)Session["ssn"];
 
-            List<string> result = new List<string>();
+            
 
             bool insertedAmountCorrect = CheckInsertedAmount(amount);
 
@@ -251,16 +293,26 @@ namespace ATM
 
         public List<string> GetAccountInformation(string alias_accountNr, int amountOfLines)
         {
-            //GetAccountBalance(accountNumber);
-            //GetAccountHistory(accountNumber);
-            Account myAccount = GetAccount(alias_accountNr);
             List<string> accountInformation = new List<string>();
+            Account myAccount = GetAccount(alias_accountNr);
+
+            if (myAccount == null)
+            {
+                accountInformation.Add("false");
+                accountInformation.Add("Technical Error");
+                return accountInformation;
+            }
+
             accountInformation.Add(myAccount.AccountAlias + ", AccountNumber: " + myAccount.AccountNumber + ", Balance: " + myAccount.Balance + ", Currency: " + myAccount.Currency);
             
             string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
 
             //addRange kanske strular??
-            accountInformation.AddRange(myController.readFromSQL(commandLine));
+            foreach (var infoRow in myController.readFromSQL(commandLine))
+            {
+                accountInformation.Add(infoRow);
+            }
+            //accountInformation.AddRange(myController.readFromSQL(commandLine));
             myAccount.Equals(null);
             return accountInformation;
         }
@@ -306,10 +358,10 @@ namespace ATM
                 myController.UpdateNumberOfBills(atmId, withdrawed100, withdrawed200, withdrawed500, withdrawed1000);
 
                 result.Add("Ok");
-                result.Add(""+withdrawed1000);
-                result.Add("" + withdrawed500);
+                result.Add(""+withdrawed100);
                 result.Add("" + withdrawed200);
-                result.Add("" + withdrawed100);
+                result.Add("" + withdrawed500);
+                result.Add("" + withdrawed1000);
                 return result;
                 //return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
                 }
