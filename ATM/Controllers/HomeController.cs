@@ -52,7 +52,7 @@ namespace ATM.Controllers
 
             string ssn = (string)Session["SSN"];
 
-            bankLogic.LoggingOfEvents("Logout_success", ssn, null, 0);
+            bankLogic.LoggingOfEvents("Logout_success", ssn, " ", 0);
 
             Session.Abandon();
 
