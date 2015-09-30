@@ -420,9 +420,10 @@ namespace ATM
             result[1] = amount;
             return result;
         }
-        public void subtractFromReceipt()
+        public void subtractFromReceipt(int lengthOfReceipt, string atmId)
         {
-
+            string commandLine = $"Update Unit SET Receipt = Receipt - '{lengthOfReceipt}' where ID = '{atmId}'";
+            myController.editSQL(commandLine);
         }
 
     }

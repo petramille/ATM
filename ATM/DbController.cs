@@ -306,15 +306,13 @@ namespace ATM
             myConnection.ConnectionString = connectionString;
             SqlDataReader myReader = null;
 
-
             try
             {
                 myConnection.Open();
-                SqlCommand myCommand = new SqlCommand();
-                myCommand.Connection = myConnection;
+                command.Connection = myConnection;
 
-                myCommand.CommandText = commandLine;
-                myReader = myCommand.ExecuteReader();
+                command.CommandText = commandLine;
+                myReader = command.ExecuteReader();
 
             }
             catch (Exception ex)
