@@ -263,7 +263,7 @@ namespace ATM.Controllers
 
                 string ssn = (string)Session["SSN"];
 
-                bankLogic.LoggingOfEvents("Print_Success", ssn, "0 ", 0);
+                bankLogic.LoggingOfEvents("Print_Success", ssn, " ", 0);
 
                 return View(receipt);
             } else if (!string.IsNullOrEmpty(accRaw))
@@ -284,7 +284,7 @@ namespace ATM.Controllers
 
                 string ssn = (string)Session["SSN"];
 
-                bankLogic.LoggingOfEvents("Print_Success", ssn, "0 ", 0);
+                bankLogic.LoggingOfEvents("Print_Success", ssn, " ", 0);
 
                 return View(receipt);
             }
