@@ -309,6 +309,7 @@ namespace ATM
             
             string commandLine = $"SELECT Top '{amountOfLines}' EventTime, EventType, HandledAmount FROM ActivityLog where EventType = 'Withdraw' And Account='{myAccount.AccountNumber}' Order by EventTime DESC";
 
+
             foreach (var infoRow in myController.readFromSQL(commandLine))
             {
                 accountInformation.Add(infoRow);
