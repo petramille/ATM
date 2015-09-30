@@ -66,6 +66,7 @@ namespace ATM.Models
         public string acc { get; set; }
         public string sum { get; set; }
         public List<string> entry { get; set; }
+        public int receiptType { get; set; }
 
         public Receipt()
         {
