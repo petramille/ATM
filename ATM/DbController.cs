@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ATM
 {
@@ -35,7 +36,7 @@ namespace ATM
             try
             {
                 command.Connection = myConnection;
-                myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+                myConnection.ConnectionString =connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
                 myConnection.Open();
 
                 command.CommandText = "SP_Login";
@@ -43,7 +44,7 @@ namespace ATM
                 //command.Parameters.Clear();
 
                 command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 12);
-                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50);
+                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 4);
                 command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar, 12);
                 command.Parameters.Add("@fName", System.Data.SqlDbType.VarChar, 20);
                 command.Parameters.Add("@numberOfTries", System.Data.SqlDbType.Int);
@@ -68,7 +69,7 @@ namespace ATM
             }
             catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage("No access to the ATM at the moment");
+                //myErrorHandler.HandleErrorMessage("No access to the ATM at the moment");
                 return null;
             }
 
@@ -131,7 +132,7 @@ namespace ATM
                 command.Parameters.Clear();
 
                 command.Parameters.Add("@EventTime", System.Data.SqlDbType.DateTime);
-                command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 10);
+                command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 20);
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
                // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
                 command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
