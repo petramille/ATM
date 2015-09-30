@@ -39,15 +39,14 @@ namespace ATM.Controllers
         // POST: Bank
         public ActionResult Index(string error)
         {
-            BankLogic loginHandler = new BankLogic();
-            Error errorContainer = new Error();
+            BankLogic bankLogic = new BankLogic();
             string loginStatus = null;
-            string sessionState = loginHandler.CheckSessionState();
+            string sessionState = bankLogic.CheckSessionState();
             AccountList AccountList = new AccountList();
 
             if (!string.IsNullOrEmpty(error))
             {
-                List<string> getAccounts = loginHandler.GetAccountsById(error);
+                List<string> getAccounts = bankLogic.GetAccountsById(error);
 
                 foreach (var account in getAccounts)
             {
@@ -58,7 +57,7 @@ namespace ATM.Controllers
             }
             else if (!string.IsNullOrEmpty(sessionState))
             {
-                List<string> getAccounts = loginHandler.GetAccountsById(sessionState);
+                List<string> getAccounts = bankLogic.GetAccountsById(sessionState);
 
                 foreach (var account in getAccounts)
                 {
@@ -81,18 +80,17 @@ namespace ATM.Controllers
         [HttpPost]
         public ActionResult Index(string SSN, string pin)
         {
-            BankLogic loginHandler = new BankLogic();
-            Error errorContainer = new Error();
+            BankLogic bankLogic = new BankLogic();
             AccountList AccountList = new AccountList();
             string loginStatus = null;
 
             if (!string.IsNullOrEmpty(SSN) && !string.IsNullOrEmpty(pin))
             {
-                loginStatus = loginHandler.LogIn(SSN, pin);
+                loginStatus = bankLogic.LogIn(SSN, pin);
 
                 if (loginStatus == "Ok")
                 {
-                    List<string> getAccounts = loginHandler.GetAccountsById(SSN);
+                    List<string> getAccounts = bankLogic.GetAccountsById(SSN);
 
                     foreach (var account in getAccounts)
                     {
@@ -119,13 +117,13 @@ namespace ATM.Controllers
         // GET: History
         public ActionResult History()
         {
-            BankLogic loginHandler = new BankLogic();
+            BankLogic bankLogic = new BankLogic();
 
-            string sessionState = loginHandler.CheckSessionState();
+            string sessionState = bankLogic.CheckSessionState();
 
             if (!string.IsNullOrEmpty(sessionState))
             {
-                List<string> getAccounts = loginHandler.GetAccountsById(sessionState);
+                List<string> getAccounts = bankLogic.GetAccountsById(sessionState);
 
                 AccountList AccountList = new AccountList();
 
@@ -160,13 +158,13 @@ namespace ATM.Controllers
         // GET: Withdrawal
         public ActionResult Withdrawal()
         {
-            BankLogic loginHandler = new BankLogic();
+            BankLogic bankLogic = new BankLogic();
 
-            string sessionState = loginHandler.CheckSessionState();
+            string sessionState = bankLogic.CheckSessionState();
 
             if (!string.IsNullOrEmpty(sessionState))
             {
-                List<string> getAccounts = loginHandler.GetAccountsById(sessionState);
+                List<string> getAccounts = bankLogic.GetAccountsById(sessionState);
 
                 AccountList AccountList = new AccountList();
 
@@ -202,24 +200,28 @@ namespace ATM.Controllers
         // GET: Landing
         public ActionResult Landing(string quantity, string account)
         {
-            BankLogic withdrawal = new BankLogic();
+            BankLogic bankLogic = new BankLogic();
 
             int sum = int.Parse(quantity);
 
-            string message = withdrawal.WithdrawFromAccount(sum, account);
+            List<string> message = bankLogic.WithdrawFromAccount(sum, account);
 
-            if (message == "Ok")
+            if (message[0] == "Ok")
             {
                 WithdrawalConfirmation confirm = new WithdrawalConfirmation();
 
                 confirm.sum = quantity;
                 confirm.account = account;
+                confirm.value100 = message[1];
+                confirm.value200 = message[2];
+                confirm.value500 = message[3];
+                confirm.value1000 = message[4];
 
                 return View(confirm);
             }
             else
             {
-                return this.RedirectToAction("Error", "Bank", new { error = message });
+                return this.RedirectToAction("Error", "Bank", new { error = message[0] });
             }
         }
 

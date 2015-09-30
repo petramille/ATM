@@ -40,5 +40,9 @@ namespace ATM.Models
     {
         public string sum { get; set; }
         public string account { get; set; }
+        public string value100 { get; set; }
+        public string value200 { get; set; }
+        public string value500 { get; set; }
+        public string value1000 { get; set; }
     }
 }
