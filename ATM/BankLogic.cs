@@ -170,7 +170,7 @@ namespace ATM
         /// <returns></returns>
         private int CalculateAmountLeftToday(string accountNumber)
         {
-            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw_success' And Account='{accountNumber}'";
+            string commandLine = $"SELECT HandledAmount FROM ActivityLog where EventTime > '{DateTime.Today}' and EventType = 'Withdraw_success' And AccountNR='{accountNumber}'";
 
             List<string> amountValues = myController.readSingleColumnFromSQL(commandLine);
 
