@@ -27,6 +27,11 @@ namespace ATM
             Currency = currency;
         }
 
+        /// <summary>
+        /// Checks if it is possible to withdraw from an account
+        /// </summary>
+        /// <param name="amountToWithdraw"> the amount to withdraw</param>
+        /// <returns>Ok if it is possible to withdraw. else a message string with what went wrong</returns>
         public virtual string WithdrawMoney(double amountToWithdraw)
         {
             if (amountToWithdraw > Balance)
