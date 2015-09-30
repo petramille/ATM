@@ -8,6 +8,10 @@ namespace ATM
 {
     public class DbController
     {
+        /// <summary>
+        /// Class that manage the conections to the database. Calls stored procedures and put in queries.
+        /// </summary>
+
         static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
         SqlConnection myConnection = new SqlConnection();
         SqlCommand command = new SqlCommand();
@@ -15,11 +19,11 @@ namespace ATM
 
 
        /// <summary>
-       /// Checks if login is valid and user exists
+       /// Checks if login is valid and user exists. 
        /// </summary>
-       /// <param name="ssn"></param>
-       /// <param name="pin"></param>
-       /// <returns></returns>
+       /// <param name="ssn">social security number and cardnumber</param>
+       /// <param name="pin">pin-code</param>
+       /// <returns>List<string> with  </returns>
         public List<string> FindUser(string ssn, string pin)
         {
 

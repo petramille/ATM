@@ -19,23 +19,24 @@ namespace ATM
        /// To add: Write to page if the ATM is out of receipts
         /// </summary>
         /// <param name="atmId">The unique ID of the ATM</param>
-        public void CheckATMStatus(int atmId)
+        public string CheckATMStatus(string atmId)
         {
             string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
 
             List<string> status = myController.readSingleColumnFromSQL(commandLine);
+            string message = "";
 
             if (status[0] == "0")
             {
-                myErrorHandler.HandleErrorMessage("Ok");
+                message="Ok";
             }
             else if (status[0] == "1")
             {
-                myErrorHandler.HandleErrorMessage("The ATM is out of service");
+                message="The ATM is out of service";
             }
             else if (status[0] == "2")
             {
-                myErrorHandler.HandleErrorMessage("The system is out of service. Maintenance on-going");
+                message="The system is out of service. Maintenance on-going";
             }
 
             commandLine = $"SELECT bills100, bills200, bills500, bills1000, Receipt From Unit where Id = '{atmId}'";
@@ -44,13 +45,14 @@ namespace ATM
 
             if (bills[0] == "0" && bills[1] == "0" && bills[2] == "0" && bills[3] == "0")
             {
-               myErrorHandler.HandleErrorMessage("The ATM is out of money.");
+                message="The ATM is out of money.";
+                
 
             }
             //bills[0] is number of 100 kr bills, bill[1] 200 kr etc, bills[4] is number of receipts
-            Session["numberOfBills"] = bills; 
+            Session["numberOfBills"] = bills;
             //Session["receipts"] = bills[4];          
-
+            return message;
         }
 
 
