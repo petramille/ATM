@@ -69,6 +69,11 @@ namespace ATM
             catch (Exception)
             {
                 myErrorHandler.HandleErrorMessage("No access to the ATM at the moment");
+
+                Controllers.BankController controller = new Controllers.BankController();
+                controller.Error("No access to the ATM at the moment");
+
+
                 return null;
             }
 

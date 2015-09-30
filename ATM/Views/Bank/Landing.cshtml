@@ -7,11 +7,37 @@
     <h2>Confirmation</h2>
     <br />
     <br />
-    <br />
-    <br />
-    <b>You have taken out @Model.sum from account @Model.account</b>
+    <b>You have taken out @Model.sum SEK from account @Model.account</b>
     <br />
     <br />
     <br />
-    <button class="form-control" value="@Model.account">Get recept</button><br />
+</div>
+<div class="row row-centered">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <button class="form-control" value="@Model.account">Get recept</button><br />
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="row row-centered">
+    <div class="col-md-3 col-centered">
+        <a href="#" class="list-group-item" style="background-color: lightblue; text-align: center"><b><br />@Model.value100 <br /> 100 bill(s)<br /><br /></b></a>
+    </div>
+    <div class="col-md-3 col-centered">
+        <a href="#" class="list-group-item" style="background-color: lightgreen; text-align: center"><b><br />@Model.value200 <br /> 200 bill(s)<br /><br /></b></a>
+    </div>
+    <div class="col-md-3 col-centered">
+        <a href="#" class="list-group-item" style="background-color: #75162C; text-align: center; color: lightgray"><b><br />@Model.value500 <br /> 500 bill(s)<br /><br /></b></a>
+    </div>
+    <div class="col-md-3 col-centered">
+        <a href="#" class="list-group-item" style="background-color: lightgray; text-align: center"><b><br />@Model.value1000 <br /> 1000 bill(s)<br /><br /></b></a>
+    </div>
 </div>
