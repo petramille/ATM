@@ -120,7 +120,7 @@ namespace ATM
         /// <param name="ssn">social security number/cardnumber. Can not be null </param>
         /// <param name="accountNumber">Account number where the action happened. Can be null</param>
         /// <param name="transactionAmount">The amount of the transaction. Can be null</param>
-        public void StoreHistory(DateTime eventTime, string eventType, string ssn, string accountNumber, double transactionAmount)
+        public void StoreHistory(string eventType, string ssn, string accountNumber, double transactionAmount)
         {
             try
             {
@@ -136,14 +136,14 @@ namespace ATM
                 command.Parameters.Add("@Eventtype", System.Data.SqlDbType.VarChar, 20);
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
                 // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
-                command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
+                command.Parameters.Add("@AccountNR", System.Data.SqlDbType.VarChar, 8);
                 command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.Float);
 
                 //command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;
                 command.Parameters["@Ssn"].Value = ssn;
                 //command.Parameters["@IP"].Value = ipNumber;
-                command.Parameters["@AccountNr"].Value = accountNumber;
+                command.Parameters["@AccountNR"].Value = accountNumber;
                 command.Parameters["@HandledAmount"].Value = transactionAmount;
 
 
@@ -151,9 +151,9 @@ namespace ATM
                 myConnection.Close();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                //Console.WriteLine(ex);
 
             }
         }

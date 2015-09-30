@@ -283,7 +283,7 @@ namespace ATM
                 else if (transferCompleted.Equals("1"))
                 {
                     DateTime presentTime = DateTime.Now;
-                    myController.StoreHistory(presentTime, myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
+                    myController.StoreHistory(myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
                     myAccount.Equals(null);
                     return result;
                     //Result shows number of the different bills
@@ -475,11 +475,21 @@ namespace ATM
         /// <param name="ssn">SSN of person doing the activity</param>
         /// <param name="accountNumber">Account number affected</param>
         /// <param name="transactionAmount">Amount to be withdrawn if event type is withdraw</param>
-        public void LoggingOfEvents(string eventType, string ssn, string accountNumber, double transactionAmount)
+        public void LoggingOfEvents(string eventType, string ssn, string alias_accountNr, double transactionAmount)
         {
-            DateTime dateTimeNow = DateTime.Now;
-
-            myController.StoreHistory(dateTimeNow, eventType, ssn, accountNumber, transactionAmount);
+            //DateTime dateTimeNow = DateTime.Now;
+            string accountNumber;
+            //if (alias_accountNr!=null)
+            //{
+                string[] splittedLine = alias_accountNr.Split(' ');
+                accountNumber = splittedLine[1];
+            //}
+            //else
+            //{
+            //    accountNumber = null;
+            //}
+            
+            myController.StoreHistory(eventType, ssn, accountNumber, transactionAmount);
         }
 
     }
