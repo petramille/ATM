@@ -14,8 +14,8 @@ namespace ATM.Controllers
             BankLogic ATMStatus = new BankLogic();
 
             //string ATMID = "A1"; // Out of Service
-            //string ATMID = "B2"; // OK
-            string ATMID = "A2"; // Low amount of currency
+            string ATMID = "B2"; // OK
+            //string ATMID = "A2"; // Low amount of currency
             //string ATMID = "C1"; // No currency
 
             Session["ATMID"] = ATMID;
@@ -48,6 +48,10 @@ namespace ATM.Controllers
 
         public ActionResult Done()
         {
+            string ssn = (string)Session["SSN"];
+
+
+
             Session.Abandon();
 
             return View();

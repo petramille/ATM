@@ -22,10 +22,14 @@
             <a class="form-control" href="../Bank/Index">Go Back</a>
         </div>
         <div class="col-md-4">
-            <a class="form-control" href="#">Print Saldo</a>
+            <a class="form-control" style="background-color:red; color:white;" href="../Home/Done"><b>Log out</b></a>
         </div>
         <div class="col-md-4">
-            <a class="form-control" href="#">Print History</a>
+            @using (Html.BeginForm("Receipt", "Bank", FormMethod.Post))
+            {
+                <input type="hidden" name="accRaw" value="@Model.accountRaw" />
+                <button class="form-control" name="acc" value="@Model.account" @Model.receipt>Get receipt</button><br />
+            }
         </div>
     </div>
 

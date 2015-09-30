@@ -44,15 +44,30 @@ namespace ATM.Models
         public string value200 { get; set; }
         public string value500 { get; set; }
         public string value1000 { get; set; }
+        public string receipt { get; set; }
     }
 
     public class AccountInformation
     {
         public string account { get; set; }
+        public string accountRaw { get; set; }
         public string sum { get; set; }
+        public string receipt { get; set; }
         public List<string> entry { get; set; }
 
         public AccountInformation()
+        {
+            this.entry = new List<string>();
+        }
+    }
+
+    public class Receipt
+    {
+        public string acc { get; set; }
+        public string sum { get; set; }
+        public List<string> entry { get; set; }
+
+        public Receipt()
         {
             this.entry = new List<string>();
         }
