@@ -254,7 +254,25 @@ namespace ATM.Controllers
             }
             else
             {
-                return this.RedirectToAction("Error", "Bank", new { error = message[0] });
+                return this.RedirectToAction("Error", "Bank", new { error = message[1] });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Receipt(string acc)
+        {
+            if (string.IsNullOrEmpty(acc))
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+            else
+            {
+
+
+
+
+
+                return View();
             }
         }
 
