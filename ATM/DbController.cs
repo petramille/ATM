@@ -300,5 +300,38 @@ namespace ATM
                 }
             }
         }
+
+        public void editSQL(string commandLine)
+        {
+            myConnection.ConnectionString = connectionString;
+            SqlDataReader myReader = null;
+
+
+            try
+            {
+                myConnection.Open();
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+
+                myCommand.CommandText = commandLine;
+                myReader = myCommand.ExecuteReader();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (myReader != null)
+                {
+                    myReader.Close();
+                }
+                if (myConnection != null)
+                {
+                    myConnection.Close();
+                }
+            }
+        }
     }
 }

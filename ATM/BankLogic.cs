@@ -414,6 +414,10 @@ namespace ATM
             result[1] = amount;
             return result;
         }
+        public void subtractFromReceipt()
+        {
+
+        }
 
     }
 
