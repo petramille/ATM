@@ -46,8 +46,6 @@ namespace ATM
             if (bills[0] == "0" && bills[1] == "0" && bills[2] == "0" && bills[3] == "0")
             {
                 message="The ATM is out of money.";
-                
-
             }
             //bills[0] is number of 100 kr bills, bill[1] 200 kr etc, bills[4] is number of receipts
             Session["numberOfBills"] = bills;
@@ -179,18 +177,21 @@ namespace ATM
 
 
         //Discuss the string that is returned. Maybe now it is supposed to be "ok" at some point when evaluated in the controller!!!
-        public string WithdrawFromAccount(int amount, string alias_accountNr)
+        public List<string> WithdrawFromAccount(int amount, string alias_accountNr)
         {
 
             Account myAccount = GetAccount(alias_accountNr);
             string ssn = (string)Session["ssn"];
+
+            List<string> result = new List<string>();
 
             bool insertedAmountCorrect = CheckInsertedAmount(amount);
 
             if (!insertedAmountCorrect)
             {
                 myAccount.Equals(null);
-                return "The requested amount of money must be even 100 SEK";
+                result.Add("The requested amount of money must be even 100 SEK");
+                return result;
             }
 
             if (myAccount.WithdrawMoney(amount) == "Ok")
@@ -199,11 +200,12 @@ namespace ATM
                 
                 if (transferCompleted.Equals("1"))
                 {
-                    string result = TransferBills(amount);
-                    if (result == "false")
+                    result = TransferBills(amount);
+                    if (result[0] == "false")
                     {
                         myAccount.Equals(null);
-                        return "That combination of bills does not exist, try another amount";
+                        result.Add("That combination of bills does not exist, try another amount");
+                        return result;
                     }
 
 
@@ -216,14 +218,16 @@ namespace ATM
                 else
                 {
                     myAccount.Equals(null);
-                    return "Withdrawal of that amount was not possible";
+                    result.Add("Withdrawal of that amount was not possible");
+                    return result;
                 }                
             }
             else
             {
                 string transferOk = myAccount.WithdrawMoney(amount);
                 myAccount.Equals(null);
-                return transferOk;
+                result.Add(transferOk);
+                return result;
             }
             //string resultMessage = account.WithDrawMoney();
             //StoreHistory();
@@ -261,7 +265,7 @@ namespace ATM
             return accountInformation;
         }
 
-        public string TransferBills(int amount)
+        public List<string> TransferBills(int amount)
         {
             List<string> bills = (List<string>)Session["numberOfBills"];
             int numberOf100 = Convert.ToInt32(bills[0]);
@@ -274,31 +278,38 @@ namespace ATM
             int withdrawed200;
             int withdrawed100;
 
-            int[] result = GetBillsWithdrawn(numberOf1000, amount, 1000);
-            withdrawed1000 = result[0];
-            amount = result[1];
+            List<string> result = new List<string>();
+            int[] tmpResult = GetBillsWithdrawn(numberOf1000, amount, 1000);
+            withdrawed1000 = tmpResult[0];
+            amount = tmpResult[1];
 
-            result = GetBillsWithdrawn(numberOf500, amount, 500);
-            withdrawed500 = result[0];
-            amount = result[1];
+            tmpResult = GetBillsWithdrawn(numberOf500, amount, 500);
+            withdrawed500 = tmpResult[0];
+            amount = tmpResult[1];
 
-            result = GetBillsWithdrawn(numberOf200, amount, 200);
-            withdrawed200 = result[0];
-            amount = result[1];
+            tmpResult = GetBillsWithdrawn(numberOf200, amount, 200);
+            withdrawed200 = tmpResult[0];
+            amount = tmpResult[1];
 
-            result = GetBillsWithdrawn(numberOf100, amount, 100);
-            withdrawed100 = result[0];
-            amount = result[1];
+            tmpResult = GetBillsWithdrawn(numberOf100, amount, 100);
+            withdrawed100 = tmpResult[0];
+            amount = tmpResult[1];
 
             if (amount>0)
             {
-                return "false";
+                result.Add("false");
+                return result;
                 }
                 else
                 {
                 //Do: Calls method that contains SP in database to update number of bills
-
-                return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
+                result.Add("Ok");
+                result.Add(""+withdrawed1000);
+                result.Add("" + withdrawed500);
+                result.Add("" + withdrawed200);
+                result.Add("" + withdrawed100);
+                return result;
+                //return $"You have withdrawn {withdrawed1000} 1000 SEK bills, {withdrawed500} 500 SEK bills, {withdrawed200} 200 SEK bills, {withdrawed100} 100 SEK bills";
                 }
             }
 
@@ -306,19 +317,19 @@ namespace ATM
                 {
             int[] result = new int[2];
 
-            int withdrawn;
+            int withdrawnBills;
             int amountOfBillsNeeded = amount / typeOfBill;
             if (numberOfBillsInATM >= amountOfBillsNeeded)
             {
-                withdrawn = amountOfBillsNeeded;
-                amount -= withdrawn;
+                withdrawnBills = amountOfBillsNeeded;
+                amount -= withdrawnBills * typeOfBill;
                 }
             else
             {
-                withdrawn = numberOfBillsInATM;
-                amount -= withdrawn;
+                withdrawnBills = numberOfBillsInATM;
+                amount -= withdrawnBills * typeOfBill;
             }
-            result[0] = withdrawn;
+            result[0] = withdrawnBills;
             result[1] = amount;
             return result;
         }
