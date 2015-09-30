@@ -48,9 +48,16 @@ namespace ATM.Controllers
             {
                 List<string> getAccounts = bankLogic.GetAccountsById(error);
 
-                foreach (var account in getAccounts)
-            {
-                    AccountList.account.Add(account.ToString());
+                if (getAccounts[0] == "false")
+                {
+                    return this.RedirectToAction("Error", "Bank", new { error = getAccounts[1] });
+                }
+                else
+                {
+                    foreach (var account in getAccounts)
+                    {
+                        AccountList.account.Add(account.ToString());
+                    }
                 }
 
                 return View(AccountList);
@@ -59,11 +66,17 @@ namespace ATM.Controllers
             {
                 List<string> getAccounts = bankLogic.GetAccountsById(sessionState);
 
-                foreach (var account in getAccounts)
+                if (getAccounts[0] == "false")
                 {
-                    AccountList.account.Add(account.ToString());
+                    return this.RedirectToAction("Error", "Bank", new { error = getAccounts[1] });
                 }
-
+                else
+                {
+                    foreach (var account in getAccounts)
+                    {
+                        AccountList.account.Add(account.ToString());
+                    }
+                }
                 return View(AccountList);
             }
             else
@@ -147,8 +160,28 @@ namespace ATM.Controllers
         {
             if (!string.IsNullOrEmpty(accountNumber))
             {
-            return View();
-        }
+                BankLogic bankLogic = new BankLogic();
+
+                List<string> accountHistory = bankLogic.GetAccountInformation(accountNumber, 5);
+
+                if (accountHistory[0] == "false")
+                {
+                    return this.RedirectToAction("Error", "Bank", new { error = accountHistory[1] });
+                }
+                else
+                {
+                    AccountInformation accountInfo = new AccountInformation();
+
+                    for (int i = 1; i < accountHistory.Count; i++)
+                    {
+                        accountInfo.entry.Add(accountHistory[i]);
+                    }
+
+                    accountInfo.account = accountHistory[0];
+
+                    return View(accountInfo);
+                }
+            }
             else
             {
                 return this.RedirectToAction("Index", "Bank");

@@ -1,26 +1,19 @@
-﻿<div class="row row-centered">
+﻿@model ATM.Models.AccountInformation
+
+<div class="row row-centered">
     <div class="col-md-6 col-md-offset-3">
         <h2>Account History</h2>
         <br />
         <br />
         <div class="list-group text-left">
-            <a href="#" class="list-group-item active"><b>Konto 1 - 5734.1543</b></a>
+            <a href="#" class="list-group-item active"><b>@Model.account</b></a>
         </div>
         <br />
         <div class="list-group text-left">
-            <a href="#" class="list-group-item">
-            <b>
-                 
-                Konto 1 - 5734.1543 - 100kr
-            </b></a>
-            <a href="#" class="list-group-item">
-            <b>
-                Konto 1 - 5734.1544 - 500kr
-            </b></a>
-            <a href="#" class="list-group-item">
-            <b>
-                Konto 1 - 5734.1545 - 43000kr
-            </b></a>
+            @foreach (var entry in Model.entry)
+            {
+                <a class="list-group-item"><b>@entry</b></a>
+            }
         </div>
         <br />
         <br />
