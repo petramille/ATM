@@ -12,7 +12,7 @@ namespace ATM
 
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
-
+        public string atmId;
         /// <summary>
         /// First method to be called before login to the person account. Sends messages
        ///  to the web page describing the status of the system and the ATM or if the ATM is out of money.
@@ -302,7 +302,9 @@ namespace ATM
                 }
                 else
                 {
-                //Do: Calls method that contains SP in database to update number of bills
+
+                myController.UpdateNumberOfBills(atmId, withdrawed100, withdrawed200, withdrawed500, withdrawed1000);
+
                 result.Add("Ok");
                 result.Add(""+withdrawed1000);
                 result.Add("" + withdrawed500);

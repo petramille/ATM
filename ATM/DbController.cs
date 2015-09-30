@@ -158,7 +158,44 @@ namespace ATM
         }
 
         
-       
+       public void UpdateNumberOfBills(string id, int withdrawed100, int withdrawed200, int withdrawed500, int withdrawed1000)
+        {
+            try
+            {
+                command.Connection = myConnection;
+                myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
+                myConnection.Open();
+
+                command.CommandText = "SP_UpdateATMBills";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Clear();
+
+                command.Parameters.Add("@ID", System.Data.SqlDbType.VarChar, 2);
+                command.Parameters.Add("@Bills100", System.Data.SqlDbType.Int);
+                command.Parameters.Add("@Bills200", System.Data.SqlDbType.Int);
+                command.Parameters.Add("@Bills500", System.Data.SqlDbType.Int);
+                command.Parameters.Add("@Bills1000", System.Data.SqlDbType.Int);
+
+
+
+                command.Parameters["@ID"].Value = id;
+                command.Parameters["@Bills100"].Value = withdrawed100;
+                command.Parameters["@Bills200"].Value = withdrawed200;
+                command.Parameters["@Bills500"].Value = withdrawed500;
+                command.Parameters["@Bills1000"].Value = withdrawed1000;
+
+
+                command.ExecuteNonQuery();
+                myConnection.Close();
+
+            }
+            catch (Exception)
+            {
+                myErrorHandler.HandleErrorMessage("No connection found");
+
+            }
+        
+    }
 
         public List<string> readFromSQL(string commandLine)
         {
