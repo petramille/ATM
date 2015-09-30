@@ -259,10 +259,11 @@ namespace ATM.Controllers
 
                 receipt.acc = acc;
                 receipt.sum = quantity;
+                receipt.receiptType = 1;
 
                 string ssn = (string)Session["SSN"];
 
-                bankLogic.LoggingOfEvents("Print_Success", ssn, " ", 0);
+                bankLogic.LoggingOfEvents("Print_Success", ssn, "0 ", 0);
 
                 return View(receipt);
             } else if (!string.IsNullOrEmpty(accRaw))
@@ -279,9 +280,11 @@ namespace ATM.Controllers
                     receipt.entry.Add(accountHistory[i]);
                 }
 
+                receipt.receiptType = 2;
+
                 string ssn = (string)Session["SSN"];
 
-                bankLogic.LoggingOfEvents("Print_Success", ssn, " ", 0);
+                bankLogic.LoggingOfEvents("Print_Success", ssn, "0 ", 0);
 
                 return View(receipt);
             }

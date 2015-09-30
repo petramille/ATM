@@ -26,7 +26,7 @@
                     <br />
                     <hr />
                     <br />
-                    @if (!string.IsNullOrEmpty(Model.sum))
+                    @if (Model.receiptType == 1)
                     {
                         <div style="text-align: left; padding-left: 40px;">
                             <h4><b>Withdrawn from account:</b></h4>
@@ -36,7 +36,7 @@
                             <h4>@Model.sum SEK</h4>
                         </div>
                     }
-                    @if (!string.IsNullOrEmpty(Model.entry[0]))
+                    @if (Model.receiptType == 2)
                     {
                         <div style="text-align: left; padding-left: 40px;">
                             <h4><b>Selected account:</b></h4>
