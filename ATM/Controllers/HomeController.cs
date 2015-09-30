@@ -20,15 +20,15 @@ namespace ATM.Controllers
 
             Session["ATMID"] = ATMID;
 
-            string checkStatus = ATMStatus.CheckATMStatus(ATMID);
+            List<string> checkStatus = ATMStatus.CheckATMStatus(ATMID);
 
-            if (checkStatus == "Ok")
+            if (checkStatus[0] == "Ok")
             {
                 return View();
             }
             else
             {
-                return this.RedirectToAction("Error", "Bank", new { error = checkStatus });
+                return this.RedirectToAction("Error", "Bank", new { error = checkStatus[1] });
             }
         }
 

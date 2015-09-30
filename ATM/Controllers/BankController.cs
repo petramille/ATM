@@ -9,33 +9,6 @@ namespace ATM.Controllers
 {
     public class BankController : Controller
     {
-        //// GET: Bank
-        //public ActionResult Index()
-        //{
-        //    BankLogic loginHandler = new BankLogic();
-
-        //    string sessionState = loginHandler.CheckSessionState();
-
-        //    if (!string.IsNullOrEmpty(sessionState))
-        //    {
-        //        List<string> getAccounts = loginHandler.GetAccountsById(sessionState);
-
-        //        AccountList AccountList = new AccountList();
-
-        //        foreach (var account in getAccounts)
-        //        {
-        //            AccountList.account.Add(account.ToString());
-        //        }
-
-        //        return View(AccountList);
-        //    }
-        //    else
-        //    {
-        //        string loginStatus = "Session is invalid, please try again.";
-        //        return this.RedirectToAction("Error", "Bank", new { error = loginStatus });
-        //    }
-        //}
-
         // POST: Bank
         public ActionResult Index(string error)
         {
@@ -95,13 +68,13 @@ namespace ATM.Controllers
         {
             BankLogic bankLogic = new BankLogic();
             AccountList AccountList = new AccountList();
-            string loginStatus = null;
+            List<string> loginStatus = new List<string>();
 
             if (!string.IsNullOrEmpty(SSN) && !string.IsNullOrEmpty(pin))
             {
                 loginStatus = bankLogic.LogIn(SSN, pin);
 
-                if (loginStatus == "Ok")
+                if (loginStatus[0] == "Ok")
                 {
                     List<string> getAccounts = bankLogic.GetAccountsById(SSN);
 
@@ -114,11 +87,7 @@ namespace ATM.Controllers
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(loginStatus))
-                    {
-                        loginStatus = "Unhandled error";
-                    }
-                    return this.RedirectToAction("Error", "Bank", new { error = loginStatus });
+                    return this.RedirectToAction("Error", "Bank", new { error = loginStatus[1] });
                 }
             }
             else
