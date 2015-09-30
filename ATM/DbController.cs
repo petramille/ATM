@@ -16,7 +16,7 @@ namespace ATM
         static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
         SqlConnection myConnection = new SqlConnection();
         SqlCommand command = new SqlCommand();
-        ErrorHandler myErrorHandler = new ErrorHandler();
+        
 
 
        /// <summary>
@@ -301,7 +301,7 @@ namespace ATM
             }
         }
 
-        public void editSQL(string commandLine)
+        public void EditSQL(string commandLine)
         {
             myConnection.ConnectionString = connectionString;
             SqlDataReader myReader = null;
