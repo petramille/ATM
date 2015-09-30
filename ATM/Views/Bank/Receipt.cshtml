@@ -1,24 +1,68 @@
-﻿
+﻿@model ATM.Models.Receipt
 @{
     ViewBag.Title = "Receipt";
 }
 
-<h2>Receipt</h2>
+<script>
+    window.setTimeout(function () {
+        window.location.href = '../Home/Done';
+    }, 8000);
+</script>
 
 <div class="row row-centered">
-    <div class="col-md-4">
+    <div class="col-md-3">
 
     </div>
-    <div class="col-md-4">
-        <table border="1">
+    <div class="col-md-6">
+        <br />
+        <br />
+        <table border="1" width="100%">
             <tr>
                 <td>
+                    <h2>Receipt</h2>
+                    <h3>Viking Finances</h3>
+                    <br />
+                    @DateTime.Now
+                    <br />
+                    <hr />
+                    <br />
+                    @if (!string.IsNullOrEmpty(Model.sum))
+                    {
+                        <div style="text-align: left; padding-left: 40px;">
+                            <h4><b>Withdrawn from account:</b></h4>
+                            <h4>@Model.acc</h4>
+                            <br />
+                            <h4><b>Amount:</b></h4>
+                            <h4>@Model.sum SEK</h4>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.entry[0]))
+                    {
+                        <div style="text-align: left; padding-left: 40px;">
+                            @foreach (var entry in Model.entry)
+                            {
+                                <h4><b>Account event:</b></h4>
+                                <h4>@entry</h4>
+                                <br />
+                            }
+                        </div>
+                    }
+                    <br />
+                    <hr />
+                    <br />
+                    Valhalla drive 1<br />
+                    Midgard<br />
+                    1568 784 23<br />
+                    Support: Support@vikingfinance.mg<br />
+                    Marketing: Marketing@vikingfinance.mg<br />
+                    <br />
+                    <br />
 
                 </td>
             </tr>
         </table>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
 
     </div>
 </div>

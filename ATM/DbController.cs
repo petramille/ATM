@@ -137,7 +137,7 @@ namespace ATM
                 command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
                 // command.Parameters.Add("@IP", System.Data.SqlDbType.VarChar, 15);
                 command.Parameters.Add("@AccountNr", System.Data.SqlDbType.VarChar, 8);
-                command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.VarChar, 8);
+                command.Parameters.Add("@HandledAmount", System.Data.SqlDbType.Float);
 
                 command.Parameters["@EventTime"].Value = eventTime;
                 command.Parameters["@EventType"].Value = eventType;

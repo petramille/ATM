@@ -141,11 +141,19 @@ namespace ATM.Controllers
                 {
                     AccountInformation accountInfo = new AccountInformation();
 
-                    for (int i = 1; i < accountHistory.Count; i++)
+                    List<string> receipt = (List<string>)Session["numberOfBills"];
+
+                    if (int.Parse(receipt[4]) < 2)
+                    {
+                        accountInfo.receipt = "disabled";
+                    }
+
+                    for (int i = 2; i < accountHistory.Count; i++)
                     {
                         accountInfo.entry.Add(accountHistory[i]);
                     }
 
+                    accountInfo.accountRaw = accountNumber;
                     accountInfo.account = accountHistory[0];
 
                     return View(accountInfo);
@@ -206,11 +214,18 @@ namespace ATM.Controllers
 
             int sum = int.Parse(quantity);
 
+            List<string> receipt = (List<string>)Session["numberOfBills"];
             List<string> message = bankLogic.WithdrawFromAccount(sum, account);
 
             if (message[0] == "Ok")
             {
                 WithdrawalConfirmation confirm = new WithdrawalConfirmation();
+
+                if (int.Parse(receipt[4]) < 1)
+                {
+                    confirm.receipt = "disabled";
+                }
+                else
 
                 confirm.sum = quantity;
                 confirm.account = account;
@@ -228,20 +243,39 @@ namespace ATM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Receipt(string acc)
+        public ActionResult Receipt(string acc, string quantity, string accRaw)
         {
-            if (string.IsNullOrEmpty(acc))
+            BankLogic bankLogic = new BankLogic();
+
+            if (!string.IsNullOrEmpty(acc) && !string.IsNullOrEmpty(quantity))
             {
-                return this.RedirectToAction("Index", "Home");
+                bankLogic.subtractFromReceipt(1, (string)Session["ATMID"]);
+
+                Receipt receipt = new Receipt();
+
+                receipt.acc = acc;
+                receipt.sum = quantity;
+
+                return View(receipt);
+            } else if (!string.IsNullOrEmpty(acc) && string.IsNullOrEmpty(quantity))
+            {
+                Receipt receipt = new Receipt();
+
+                bankLogic.subtractFromReceipt(2, (string)Session["ATMID"]);
+                List<string> accountHistory = bankLogic.GetAccountInformation(accRaw, 25);
+
+                receipt.acc = acc;
+
+                for (int i = 2; i < accountHistory.Count; i++)
+                {
+                    receipt.entry.Add(accountHistory[i]);
+                }
+
+                return View(receipt);
             }
             else
             {
-
-
-
-
-
-                return View();
+                return this.RedirectToAction("Index", "Home");
             }
         }
 

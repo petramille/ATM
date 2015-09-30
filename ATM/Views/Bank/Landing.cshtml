@@ -5,7 +5,7 @@
 
 <script>
     window.setTimeout(function () {
-        window.location.href = '../Home/Index';
+        window.location.href = '../Home/Done';
     }, 8000);
 </script>
 
@@ -24,7 +24,8 @@
     <div class="col-md-4">
         @using (Html.BeginForm("Receipt", "Bank", FormMethod.Post))
         {
-            <button class="form-control" name="acc" value="@Model.account">Get receipt</button><br />
+            <input type="hidden" name="quantity" value="@Model.sum" />
+            <button class="form-control" name="acc" value="@Model.account" @Model.receipt>Get receipt</button><br />
         }
     </div>
     <div class="col-md-4">
