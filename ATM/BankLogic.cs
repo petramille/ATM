@@ -275,7 +275,7 @@ namespace ATM
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
                 if (transferCompleted == null)
                 {
-
+                    result.Add("false");
                     result.Add("Withdrawal was not possible");
                     return result;
                 }
@@ -283,7 +283,7 @@ namespace ATM
                 else if (transferCompleted.Equals("1"))
                 {
                     DateTime presentTime = DateTime.Now;
-                    myController.StoreHistory(myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
+                    //myController.StoreHistory(myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
                     myAccount.Equals(null);
                     return result;
                     //Result shows number of the different bills
