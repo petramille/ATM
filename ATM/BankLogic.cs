@@ -234,7 +234,7 @@ namespace ATM
             if (!insertedAmountCorrect)
             {
                 myAccount.Equals(null);
-                result.Add("The requested amount of money must be even 100 SEK");
+                result.Add("The requested amount of money must be an even 100 SEK");
                 return result;
             }
 

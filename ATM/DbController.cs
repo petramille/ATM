@@ -234,7 +234,7 @@ namespace ATM
             }
             catch (Exception ex)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+                
                 return null;
             }
             finally
@@ -285,7 +285,7 @@ namespace ATM
             }
             catch (Exception ex)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+               
                 return null;
             }
             finally
