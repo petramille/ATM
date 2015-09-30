@@ -7,11 +7,11 @@ namespace ATM
 {
     public class ErrorHandler
     {
-        public void HandleErrorMessage(string message)
-        {
-            //sends error message to error page
+        //public void HandleErrorMessage(string message)
+        //{
+        //    //sends error message to error page
 
-        }
+        //}
 
         public string LogInAlarms(string logInAttempts)
         {

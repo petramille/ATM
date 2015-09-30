@@ -3,6 +3,12 @@
     ViewBag.Title = "Landing";
 }
 
+<script>
+    window.setTimeout(function () {
+        window.location.href = '../Home/Index';
+    }, 8000);
+</script>
+
 <div class="row row-centered">
     <h2>Confirmation</h2>
     <br />
@@ -16,7 +22,10 @@
     <div class="col-md-4">
     </div>
     <div class="col-md-4">
-        <button class="form-control" value="@Model.account">Get recept</button><br />
+        @using (Html.BeginForm("Receipt", "Bank", FormMethod.Post))
+        {
+            <button class="form-control" name="acc" value="@Model.account">Get receipt</button><br />
+        }
     </div>
     <div class="col-md-4">
     </div>

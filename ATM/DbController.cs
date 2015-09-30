@@ -112,7 +112,7 @@ namespace ATM
             }
             catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+               
                 return null;
             }
 
@@ -153,7 +153,7 @@ namespace ATM
             }
             catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage("No connection found");
+               
                
             }
         }
@@ -190,7 +190,7 @@ namespace ATM
             }
             catch (Exception)
             {
-                myErrorHandler.HandleErrorMessage("The number of bills could not be updated");
+               
 
             }
         

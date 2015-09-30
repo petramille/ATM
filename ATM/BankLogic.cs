@@ -12,37 +12,42 @@ namespace ATM
 
         DbController myController = new DbController();
         ErrorHandler myErrorHandler = new ErrorHandler();
-        public string atmId;
+        
+
         /// <summary>
         /// First method to be called before login to the person account. Sends messages
        ///  to the web page describing the status of the system and the ATM or if the ATM is out of money.
        /// To add: Write to page if the ATM is out of receipts
         /// </summary>
         /// <param name="atmId">The unique ID of the ATM</param>
-        public string CheckATMStatus(string atmId)
+        public List<string> CheckATMStatus(string atmId)
         {
             string commandLine = $"SELECT UnitStatus From Unit where Id = '{atmId}'";
 
             List<string> status = myController.readSingleColumnFromSQL(commandLine);
             if (status==null)
             {
-                return "No access to the ATM at the moment";
-
+                status.Add("false");
+                status.Add("No access to the ATM at the moment");
+                return status;
             }
 
-            string message = "";
+            List<string> message = new List<string>();
 
             if (status[0] == "0")
             {
-                message="Ok";
+                message.Add("Ok");
             }
             else if (status[0] == "1")
             {
-                message="The ATM is out of service";
+                message.Add("false");
+                message.Add("The ATM is out of service");
             }
             else if (status[0] == "2")
             {
-                message="The system is out of service. Maintenance on-going";
+                message.Add("false");
+                message.Add("The system is out of service. Maintenance on-going");
+               
             }
 
             commandLine = $"SELECT bills100, bills200, bills500, bills1000, Receipt From Unit where Id = '{atmId}'";
@@ -51,7 +56,8 @@ namespace ATM
 
             if (bills[0] == "0" && bills[1] == "0" && bills[2] == "0" && bills[3] == "0")
             {
-                message="The ATM is out of money.";
+                message.Add("false");
+                message.Add("The ATM is out of money.");
             }
             //bills[0] is number of 100 kr bills, bill[1] 200 kr etc, bills[4] is number of receipts
             Session["numberOfBills"] = bills;
@@ -67,15 +73,17 @@ namespace ATM
         /// <param name="ssn">The SSN of the person who logs in</param>
         /// <param name="pin">Pin code</param>
         /// <returns>Error message describing the number of login tries left or "ok" if login was successful.</returns>
-        public string LogIn(string ssn, string pin)
+        public List<string> LogIn(string ssn, string pin)
         {
             
             List<string> tmpCustomer = new List<string>();
             tmpCustomer = myController.FindUser(ssn, pin);
 
+            List<string> tmpList = new List<string>();
             if (tmpCustomer==null)
             {
-                return "No access to the ATM at the moment";
+                tmpList.Add("false");
+                tmpList.Add("No access to the ATM at the moment");
             }
 
             if ((tmpCustomer[2]) == "3")
@@ -84,14 +92,17 @@ namespace ATM
                 Session["name"] = tmpCustomer[1];
 
                 //myController.StoreHistory();
-                return "Ok";
+                tmpList.Add("Ok");
             }
             else
             {
                 string errorMessage = myErrorHandler.LogInAlarms(tmpCustomer[2]);
+                tmpList.Add("false");
+                tmpList.Add(errorMessage);
                 //myController.StoreHistory();
-                return errorMessage;
+                
             }
+            return tmpList;
         }
 
 
@@ -234,6 +245,7 @@ namespace ATM
             if (!insertedAmountCorrect)
             {
                 myAccount.Equals(null);
+                result.Add("false");
                 result.Add("The requested amount of money must be an even 100 SEK");
                 return result;
             }
@@ -248,6 +260,7 @@ namespace ATM
                     if (result[0] == "false")
                     {
                         myAccount.Equals(null);
+                        
                         result.Add("That combination of bills does not exist, try another amount");
                         return result;
                     }
@@ -262,6 +275,7 @@ namespace ATM
                 else
                 {
                     myAccount.Equals(null);
+                    result.Add("false");
                     result.Add("Withdrawal of that amount was not possible");
                     return result;
                 }                
@@ -270,6 +284,7 @@ namespace ATM
             {
                 string transferOk = myAccount.WithdrawMoney(amount);
                 myAccount.Equals(null);
+                result.Add("false");
                 result.Add(transferOk);
                 return result;
             }
@@ -316,7 +331,9 @@ namespace ATM
                 accountInformation.Add("No access to the ATM at the moment");
 
             }
+
             string tmpString;
+            accountInformation.Add("Ok");
             foreach (var infoRow in informationRows)
             {
                 tmpString = infoRow.Replace("Withdraw_success", "Withdraw");
@@ -365,7 +382,7 @@ namespace ATM
                 }
                 else
                 {
-
+                string atmId = (string)Session["ATMID"];
                 myController.UpdateNumberOfBills(atmId, withdrawed100, withdrawed200, withdrawed500, withdrawed1000);
 
                 result.Add("Ok");
