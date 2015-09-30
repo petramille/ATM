@@ -262,8 +262,14 @@ namespace ATM
                 }
 
                 string transferCompleted = myController.WithdrawFromAccount(myAccount.AccountNumber, ssn, amount);
-                
-                if (transferCompleted.Equals("1"))
+                if (transferCompleted == null)
+                {
+                    result.Add("false");
+                    result.Add("Withdrawal was not possible");
+                    return result;
+                }
+               
+                else if (transferCompleted.Equals("1"))
                 {
                     DateTime presentTime = DateTime.Now;
                     myController.StoreHistory(presentTime, myAccount.AccountType, ssn, myAccount.AccountNumber, amount);
