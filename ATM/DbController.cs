@@ -35,6 +35,7 @@ namespace ATM
 
                 command.CommandText = "SP_Login";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Clear();
 
                 command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 12);
                 command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 4);
@@ -82,17 +83,18 @@ namespace ATM
                 myConnection.ConnectionString = connectionString; // @"Data Source=localhost\SQLEXPRESS;Initial Catalog=Contacts;Integrated Security=SSPI";
                 myConnection.Open();
 
-                command.CommandText = "SP_WithdrawMoney";
+                command.CommandText = "sp_WithdrawMoney";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Clear();
 
                 command.Parameters.Add("@AccountNR", System.Data.SqlDbType.VarChar, 8);
-                command.Parameters.Add("@Ssn", System.Data.SqlDbType.VarChar, 12);
+                command.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar, 12);
                 command.Parameters.Add("@WithdrawAmount", System.Data.SqlDbType.Float);
                 command.Parameters.Add("@Message", System.Data.SqlDbType.VarChar, 1);
 
 
                 command.Parameters["@AccountNR"].Value = accountNumber;
-                command.Parameters["@Ssn"].Value = ssn;
+                command.Parameters["@SSN"].Value = ssn;
                 command.Parameters["@WithdrawAmount"].Value = amount;
                 command.Parameters["@Message"].Direction = System.Data.ParameterDirection.Output;
 
@@ -105,7 +107,7 @@ namespace ATM
                 return message;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 return null;
