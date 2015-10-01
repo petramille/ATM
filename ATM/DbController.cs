@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -12,8 +13,13 @@ namespace ATM
         /// <summary>
         /// Class that manage the conections to the database. Calls stored procedures and put in queries.
         /// </summary>
+        /// 
 
-        static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
+        string connectionString = ConfigurationManager.ConnectionStrings["ATM"].ConnectionString;
+
+        //static string connectionString = @"Server=tcp:igru9irx7p.database.windows.net,1433;Database=ATM;User ID=ATM-Admin@igru9irx7p;Password=Qwerty123!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30";
+
+
         SqlConnection myConnection = new SqlConnection();
         SqlCommand command = new SqlCommand();
 
