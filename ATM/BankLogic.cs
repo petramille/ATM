@@ -473,7 +473,7 @@ namespace ATM
         /// </summary>
         /// <param name="eventType">Type of event being logged</param>
         /// <param name="ssn">SSN of person doing the activity</param>
-        /// <param name="accountNumber">Account number affected</param>
+        /// <param name="accountNumber">Alias + Account number affected</param>
         /// <param name="transactionAmount">Amount to be withdrawn if event type is withdraw</param>
         public void LoggingOfEvents(string eventType, string ssn, string alias_accountNr, double transactionAmount)
         {
