@@ -13,8 +13,8 @@ namespace ATM.Controllers
         {
             BankLogic ATMStatus = new BankLogic();
 
-            //string ATMID = "A1"; // Out of Service
-            string ATMID = "B2"; // OK
+            string ATMID = "A1"; // Ok
+            //string ATMID = "B2"; // Out of Service
             //string ATMID = "A2"; // Low amount of currency
             //string ATMID = "C1"; // No currency
 
