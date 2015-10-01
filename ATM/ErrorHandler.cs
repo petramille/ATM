@@ -19,9 +19,9 @@ namespace ATM
             switch (logInAttempts)
             {
                 case "0":
-                    return "YOU ARE SUCH A FAILURE!!!\n GO TO YOUR BANK TO ENABLE YOUR CARD AGAIN";
+                    return "YOU HAVE ENTERED THE WRONG PIN TOO MANY TIMES,\nYOUR CARD HAS BEEN LOCKED, \nGO TO YOUR BANK TO ENABLE YOUR CARD AGAIN";
                 case "1":
-                    return "WRONG CODE AGAIN. YOU ONLY HAVE ONE ATTEMPT LEFT!!!!!!!";
+                    return "WRONG CODE AGAIN. YOU ONLY HAVE ONE ATTEMPT LEFT!";
                 case "2":
                     return "Wrong code. You have two more attempts";
                 default:
