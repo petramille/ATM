@@ -19,13 +19,15 @@
         <table border="1" width="100%">
             <tr>
                 <td>
-                    <h2>Receipt</h2>
-                    <h3>Viking Finances</h3>
-                    <br />
-                    @DateTime.Now
-                    <br />
-                    <hr />
-                    <br />
+                    <center>
+                        <h2>Receipt</h2>
+                        <h3>Viking Finances</h3>
+                        <br />
+                        @DateTime.Now
+                        <br />
+                        <hr />
+                        <br />
+                    </center>
                     @if (Model.receiptType == 1)
                     {
                         <div style="text-align: left; padding-left: 40px;">
@@ -52,6 +54,7 @@
                     }
                     <br />
                     <hr />
+                    <center>
                     <br />
                     Valhalla drive 1<br />
                     Midgard<br />
@@ -60,7 +63,7 @@
                     Marketing: Marketing@vikingfinance.mg<br />
                     <br />
                     <br />
-
+                    </center>
                 </td>
             </tr>
         </table>
