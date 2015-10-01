@@ -145,6 +145,7 @@ namespace ATM.Controllers
         }
 
         // POST: History
+        // Get account history and display account balance
         [HttpPost]
         public ActionResult History(string accountNumber)
         {
@@ -229,6 +230,7 @@ namespace ATM.Controllers
         }
 
         // POST: Withdrawal
+        // Show page to be able to withdraw money
         [HttpPost]
         public ActionResult Withdrawal(string accountNumber)
         {
@@ -246,6 +248,7 @@ namespace ATM.Controllers
         }
 
         // GET: Landing
+        // Confirmation page when taking out money
         public ActionResult Landing(string quantity, string account)
         {
             // Create BankLogic object and prepare variables
@@ -341,6 +344,7 @@ namespace ATM.Controllers
         }
 
         // GET: Error
+        // Error page to display errors
         public ActionResult Error(string error)
         {
             // Open error Model to be passed in to the veiw with the error

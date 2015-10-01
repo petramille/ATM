@@ -9,6 +9,8 @@ namespace ATM.Controllers
 {
     public class HomeController : Controller
     {
+        // GET: Index
+        // Display login page
         public ActionResult Index()
         {
             BankLogic ATMStatus = new BankLogic();
@@ -35,6 +37,7 @@ namespace ATM.Controllers
         }
 
         // GET: About
+        // Show About us page
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -43,6 +46,7 @@ namespace ATM.Controllers
         }
 
         // GET: Contact
+        // Show contact info page
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -51,6 +55,7 @@ namespace ATM.Controllers
         }
 
         // GET: Done
+        // Clear session and display a good bye message 
         public ActionResult Done()
         {
             // Get bank logic object and current session
